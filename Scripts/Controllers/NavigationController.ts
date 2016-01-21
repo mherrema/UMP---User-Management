@@ -9,35 +9,46 @@ module UMPApp
     // activityItems: Array< IActivityItem >;
     // actionsShown: Array< boolean >;
     init: Function;
+    clearFilters: Function;
     currentRoute: INavItem;
     isActive: Function;
+    filtersActive: boolean;
+    shouldShowButton: boolean;
   }
 
   export class NavigationController extends BaseController.Controller
   {
     scope: INavigationScope;
-    static $inject = ['$scope', 'navigationService'];
+    static $inject = ['$scope', 'navigationService', 'usersService', 'teacherService'];
 
-    constructor( $scope: INavigationScope, navService: NavigationService)
+    constructor( $scope: INavigationScope, navService: NavigationService, usersService: UsersService, teacherService: TeacherService)
     {
       super( $scope );
 
       var controller = this;
-      // navService.goToMainNav();
 
       $scope.init = function(){
-        // $scope.activityItems = activityService.getActivityItems();
-        // navService.setCurrentRoute({ route: {name: 'Activity', url: "#/activity"}});
-        // $scope.actionsShown = new Array < boolean >();
-        // $scope.activityItems.forEach(s => {
-        //   $scope.actionsShown.push(false);
-        // });
-        // controller.setActionsShown($scope.actionsShown);
+
       }
 
       $scope.$watch(() => navService.currentRoute,
       (newValue: INavItem, oldValue: INavItem) => {
         $scope.currentRoute = newValue;
+      });
+
+      $scope.$watch(() => navService.shouldShowButton,
+      (newValue: boolean, oldValue: boolean) => {
+        $scope.shouldShowButton = newValue;
+      });
+
+      $scope.$watch(() => usersService.filtersActive,
+      (newValue: boolean, oldValue: boolean) => {
+        $scope.filtersActive = newValue;
+      });
+
+      $scope.$watch(() => teacherService.filtersActive,
+      (newValue: boolean, oldValue: boolean) => {
+        $scope.filtersActive = newValue;
       });
 
       $scope.isActive = function(navName){
@@ -52,32 +63,12 @@ module UMPApp
         }
         return false;
       }
-    }
 
-    // setActionsShown(input: Array< boolean >):void{
-    //   this.actionsShown = input;
-    // }
-    //
-    // closeActions():void
-    // {
-    //   for(var index in this.actionsShown){
-    //     this.actionsShown[index] = false;
-    //   }
-    // }
-    //
-    // toggleActions(index:number)
-    // {
-    //   //close if selecting one already open
-    //   if(this.actionsShown[index]){
-    //     this.actionsShown[index] = false;
-    //   }
-    //   //close all and open
-    //   else
-    //   {
-    //     this.closeActions();
-    //     this.actionsShown[index] = true;
-    //   }
-    // }
+      $scope.clearFilters = function(){
+        usersService.clearFilters();
+        teacherService.clearFilters();
+      }
+    }
 
   }
 }

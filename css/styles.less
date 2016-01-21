@@ -54,6 +54,24 @@ h5 {
 }
 
 .inga-table {
+    &.row-link {
+        tr {
+            cursor: pointer;
+            &:hover {
+                td {
+                    transition: background 0.1s ease;
+                    background: #e4f5f9;
+                }
+                &>td:first-child {
+                    transition: background 0.1s ease;
+                    background: #d9f1f7;
+                }
+            }
+        }
+    }
+}
+
+.inga-table {
     width: 100%;
     border-bottom: #e5e5e5 1px solid;
     tr {
@@ -98,24 +116,6 @@ h5 {
         }
         &>:last-child {
             border-right: none;
-        }
-        &:hover {
-            input[type="checkbox"] {
-                opacity: 1;
-                padding: 7px;
-            }
-        }
-        &.selected {
-            border-top: #1fbdd5 3px solid;
-            border-bottom: #1fbdd5 3px solid;
-            td {
-                padding-top: 11px;
-                padding-bottom: 11px;
-                background: #e4f5f9;
-            }
-            &>:first-child {
-                background: #d9f1f7;
-            }
         }
     }
     &.card-headings {

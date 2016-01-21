@@ -21,9 +21,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.13.2/select.js"></script>
     <script src="js/Services/NavigationService.js"></script>
+    <script src="js/Services/UsersService.js"></script>
+    <script src="js/Services/TeacherService.js"></script>
     <script src="js/Controllers/BaseController.js"></script>
     <script src="js/Controllers/NavigationController.js"></script>
-    <script src="js/Controllers/UserController.js"></script>
+    <script src="js/Controllers/UsersController.js"></script>
     <script src="js/Controllers/TeacherController.js"></script>
     <script src="js/Controllers/BulkUploadController.js"></script>
     <script src="js/app.js"></script>
@@ -38,7 +40,8 @@
                     <a href="#/users"><h4 ng-class="{'active': isActive('Users')}">USERS</h4></a>
                     <a href="#/teachers"><h4 ng-class="{'active': isActive('Teachers')}">TEACHERS</h4></a>
                     <a href="#/bulkupload"><h4 ng-class="{'active': isActive('Bulk Upload')}">BULK UPLOAD</h4></a>
-                    <button class="btn  top-button inga-btn inga-btn-positive">NEW USER</button>
+                    <a href="#/user" class="btn  top-button inga-btn inga-btn-positive" ng-if="shouldShowButton">NEW USER</a>
+                    <button class="btn  top-button inga-btn inga-btn-negative" ng-click="clearFilters()" ng-if="filtersActive">Clear Filters</button>
                 </div>
             </div>
         </div>

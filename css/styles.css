@@ -48,6 +48,17 @@ h5 {
   margin-bottom: 20px;
   min-width: 210px;
 }
+.inga-table.row-link tr {
+  cursor: pointer;
+}
+.inga-table.row-link tr:hover td {
+  transition: background 0.1s ease;
+  background: #e4f5f9;
+}
+.inga-table.row-link tr:hover > td:first-child {
+  transition: background 0.1s ease;
+  background: #d9f1f7;
+}
 .inga-table {
   width: 100%;
   border-bottom: #e5e5e5 1px solid;
@@ -92,22 +103,6 @@ h5 {
 }
 .inga-table tr > :last-child {
   border-right: none;
-}
-.inga-table tr:hover input[type="checkbox"] {
-  opacity: 1;
-  padding: 7px;
-}
-.inga-table tr.selected {
-  border-top: #1fbdd5 3px solid;
-  border-bottom: #1fbdd5 3px solid;
-}
-.inga-table tr.selected td {
-  padding-top: 11px;
-  padding-bottom: 11px;
-  background: #e4f5f9;
-}
-.inga-table tr.selected > :first-child {
-  background: #d9f1f7;
 }
 .inga-table.card-headings th {
   background-color: #fff;

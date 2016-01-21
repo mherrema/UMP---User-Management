@@ -34,7 +34,7 @@ var UMPApp;
 (function (UMPApp) {
     var myApp = new UMP.Module('UMPApp', ['ngRoute', 'ui.select', 'ngSanitize']);
     myApp.addController('navigationController', UMPApp.NavigationController);
-    myApp.addController('UMPUserController', UMPApp.UserController);
+    myApp.addController('UMPUsersController', UMPApp.UsersController);
     myApp.addController('UMPTeacherController', UMPApp.TeacherController);
     myApp.addController('UMPBulkUploadController', UMPApp.BulkUploadController);
     // myApp.addController( 'projectListController', ProjectListController );
@@ -46,11 +46,26 @@ var UMPApp;
     // myApp.addController( 'financialsController', FinancialsController );
     // myApp.addController( 'clientsSettingsController', ClientsSettingsController );
     myApp.addService('navigationService', UMPApp.NavigationService);
-    // myApp.addService('activityService', ActivityService);
+    myApp.addService('usersService', UMPApp.UsersService);
+    myApp.addService('teacherService', UMPApp.TeacherService);
     // myApp.addService('projectService', ProjectService);
     // myApp.addFactory('navigationFactory', NavigationFactory);
-    myApp.addRoute("/users", "partials/users.html", "UMPUserController");
+    myApp.addRoute("/user", "partials/user.html", "UMPUserController");
+    myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
     myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
     myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
+    myApp.app.directive('rowLink', ['$location', function ($location) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    element.attr('style', 'cursor:pointer');
+                    element.on('click', function () {
+                        console.log(attr.rowLink);
+                        $location.path(attr.rowLink);
+                        scope.$apply();
+                    });
+                }
+            };
+        }]);
 })(UMPApp || (UMPApp = {}));
 //# sourceMappingURL=app.js.map

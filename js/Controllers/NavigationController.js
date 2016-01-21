@@ -9,21 +9,22 @@ var UMPApp;
 (function (UMPApp) {
     var NavigationController = (function (_super) {
         __extends(NavigationController, _super);
-        function NavigationController($scope, navService) {
+        function NavigationController($scope, navService, usersService, teacherService) {
             _super.call(this, $scope);
             var controller = this;
-            // navService.goToMainNav();
             $scope.init = function () {
-                // $scope.activityItems = activityService.getActivityItems();
-                // navService.setCurrentRoute({ route: {name: 'Activity', url: "#/activity"}});
-                // $scope.actionsShown = new Array < boolean >();
-                // $scope.activityItems.forEach(s => {
-                //   $scope.actionsShown.push(false);
-                // });
-                // controller.setActionsShown($scope.actionsShown);
             };
             $scope.$watch(function () { return navService.currentRoute; }, function (newValue, oldValue) {
                 $scope.currentRoute = newValue;
+            });
+            $scope.$watch(function () { return navService.shouldShowButton; }, function (newValue, oldValue) {
+                $scope.shouldShowButton = newValue;
+            });
+            $scope.$watch(function () { return usersService.filtersActive; }, function (newValue, oldValue) {
+                $scope.filtersActive = newValue;
+            });
+            $scope.$watch(function () { return teacherService.filtersActive; }, function (newValue, oldValue) {
+                $scope.filtersActive = newValue;
             });
             $scope.isActive = function (navName) {
                 if ($scope.currentRoute.name == "User Management" && navName == "Users") {
@@ -37,8 +38,12 @@ var UMPApp;
                 }
                 return false;
             };
+            $scope.clearFilters = function () {
+                usersService.clearFilters();
+                teacherService.clearFilters();
+            };
         }
-        NavigationController.$inject = ['$scope', 'navigationService'];
+        NavigationController.$inject = ['$scope', 'navigationService', 'usersService', 'teacherService'];
         return NavigationController;
     })(BaseController.Controller);
     UMPApp.NavigationController = NavigationController;

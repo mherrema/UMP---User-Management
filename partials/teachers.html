@@ -1,10 +1,10 @@
 <div ng-init="init()">
 <div class="row above-table-actions-row" style="padding-top: 0.5em; padding-bottom: 0.5em;">
     <div class="col-sm-4">
-        <input class="form-control" placeholder="Search by first or last name, or teacher ID" />
+        <input ng-model="searchInput" class="form-control" placeholder="Search by first or last name, or teacher ID" />
     </div>
     <div class="col-sm-4">
-      <ui-select ng-model="$parent.selectedDistrict" theme="select2">
+      <ui-select ng-model="$parent.selectedDistrict" theme="select2" on-select="selectDistrict($item, $model)">
         <ui-select-match>
           <span ng-bind="$select.selected.name"></span>
         </ui-select-match>
@@ -14,7 +14,7 @@
       </ui-select>
     </div>
     <div class="col-sm-4">
-      <ui-select ng-model="$parent.selectedSchool" ng-disabled="selectedDistrict.name == 'Select District'" theme="select2">
+      <ui-select ng-model="$parent.selectedSchool" ng-disabled="selectedDistrict.name == 'Select District'" theme="select2" on-select="selectSchool($item, $model)">
         <ui-select-match>
           <span ng-bind="$select.selected.name"></span>
         </ui-select-match>
@@ -47,32 +47,15 @@
             </th>
             <th></th>
         </tr>
-        <tr>
-            <td>Cedar Springs Public</td>
-            <td>Cedar Trails Elem School</td>
-            <td>E</td>
-            <td>Sullivan</td>
-            <td>999</td>
-            <td>0</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Cedar Springs Public</td>
-            <td>Cedar Trails Elem School</td>
-            <td>S</td>
-            <td>Sendler</td>
-            <td>995</td>
-            <td>0</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Cedar Springs Public</td>
-            <td>Cedar Trails Elem School</td>
-            <td>A</td>
-            <td>Secor</td>
-            <td>994</td>
-            <td>0</td>
-            <td></td>
+        <tr ng-if="teachers && teachers.length == 0"><td colspan="7">No Teachers</td></tr>
+        <tr ng-repeat="teacher in teachers">
+          <td>{{teacher.district}}</td>
+          <td>{{teacher.school}}</td>
+          <td>{{teacher.firstName}}</td>
+          <td>{{teacher.lastName}}</td>
+          <td>{{teacher.teacherId}}</td>
+          <td>{{teacher.scheduleCount}}</td>
+          <td></td>
         </tr>
     </table>
 </div>
