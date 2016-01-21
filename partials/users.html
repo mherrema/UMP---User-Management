@@ -1,0 +1,88 @@
+<div ng-init="init()">
+<div class="row above-table-actions-row" style="padding-top: 0.5em; padding-bottom: 0.5em;">
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Search by first or last name, or email" />
+            </div>
+            <div class="col-sm-4">
+              <ui-select ng-model="$parent.selectedDistrict" theme="select2">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.id">
+                  <span ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="col-sm-4">
+              <ui-select ng-model="$parent.selectedUserType" theme="select2">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (userTypeArray | filter: $select.search) track by item.id">
+                  <span ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+        </div>
+        <div class="row">
+            <table class="inga-table" style="position:relative;">
+                <tr>
+                    <th>
+                        <div class="search-box"><span class="search-box-title">Name</span></div>
+                    </th>
+                    <th>
+                        <div class="heading-title" ng-click="toggleHeading1()">Username</div>
+                    </th>
+                    <th>
+                        <div class="heading-title" ng-click="toggleHeading2()">Email</div>
+                    </th>
+                    <th>
+                        <div class="heading-title" ng-click="toggleHeading3()">Last Login</div>
+                    </th>
+                    <th>
+                        <div class="heading-title" ng-click="toggleHeading4()">Locked Out</div>
+                    </th>
+                    <th>
+                        <div class="heading-title" ng-click="toggleHeading4()">Roles</div>
+                    </th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Byron Center School</td>
+                    <td>bcschool@fake.com</td>
+                    <td>bcschool@fake.com</td>
+                    <td>1/15/2016 7:58 PM</td>
+                    <td>No</td>
+                    <td>Byron Center School Users</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Byron Center School</td>
+                    <td>bcschool@fake.com</td>
+                    <td>bcschool@fake.com</td>
+                    <td>1/15/2016 7:58 PM</td>
+                    <td>No</td>
+                    <td>Byron Center School Users</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Byron Center School</td>
+                    <td>bcschool@fake.com</td>
+                    <td>bcschool@fake.com</td>
+                    <td>1/15/2016 7:58 PM</td>
+                    <td>No</td>
+                    <td>Byron Center School Users</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Byron Center School</td>
+                    <td>bcschool@fake.com</td>
+                    <td>bcschool@fake.com</td>
+                    <td>1/15/2016 7:58 PM</td>
+                    <td>No</td>
+                    <td>Byron Center School Users</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+      </div>

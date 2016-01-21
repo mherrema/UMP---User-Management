@@ -1,0 +1,79 @@
+<div ng-init="init()">
+<div class="row above-table-actions-row" style="padding-top: 0.5em; padding-bottom: 0.5em;">
+    <div class="col-sm-4">
+        <input class="form-control" placeholder="Search by first or last name, or teacher ID" />
+    </div>
+    <div class="col-sm-4">
+      <ui-select ng-model="$parent.selectedDistrict" theme="select2">
+        <ui-select-match>
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.id">
+          <span ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="col-sm-4">
+      <ui-select ng-model="$parent.selectedSchool" ng-disabled="selectedDistrict.name == 'Select District'" theme="select2">
+        <ui-select-match>
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (schoolArray | filter: $select.search) track by item.id">
+          <span ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+</div>
+<div class="row">
+    <table class="inga-table" style="position:relative;">
+        <tr>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading1()">District</div>
+            </th>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading1()">School</div>
+            </th>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading2()">First Name</div>
+            </th>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading3()">Last Name</div>
+            </th>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading4()">TeacherID</div>
+            </th>
+            <th>
+                <div class="heading-title" ng-click="toggleHeading4()">Schedule Count</div>
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>Cedar Springs Public</td>
+            <td>Cedar Trails Elem School</td>
+            <td>E</td>
+            <td>Sullivan</td>
+            <td>999</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Cedar Springs Public</td>
+            <td>Cedar Trails Elem School</td>
+            <td>S</td>
+            <td>Sendler</td>
+            <td>995</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Cedar Springs Public</td>
+            <td>Cedar Trails Elem School</td>
+            <td>A</td>
+            <td>Secor</td>
+            <td>994</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+</div>
