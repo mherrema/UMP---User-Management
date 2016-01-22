@@ -9,6 +9,7 @@ var UMPApp;
         function NavigationService() {
             this.currentRoute = { name: "" };
             this.shouldShowButton = false;
+            this.inUserEdit = false;
         }
         NavigationService.prototype.setCurrentRoute = function (item) {
             console.log(item);
@@ -18,6 +19,12 @@ var UMPApp;
             }
             else {
                 this.shouldShowButton = false;
+            }
+            if (item.name == "Edit User" || item.name == "New User") {
+                this.inUserEdit = true;
+            }
+            else {
+                this.inUserEdit = false;
             }
             console.log("Setting route: " + this.currentRoute.name);
         };

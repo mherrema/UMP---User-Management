@@ -4,7 +4,7 @@
 module UMPApp
 {
 
-  export interface IUserScope extends BaseController.IScope
+  export interface IUsersScope extends BaseController.IScope
   {
     init: Function;
     searchUsers: Function;
@@ -20,10 +20,10 @@ module UMPApp
 
   export class UsersController extends BaseController.Controller
   {
-    scope: IUserScope;
+    scope: IUsersScope;
     static $inject = ['$scope', 'navigationService', 'usersService'];
 
-    constructor( $scope: IUserScope, navService: NavigationService, usersService: UsersService)
+    constructor( $scope: IUsersScope, navService: NavigationService, usersService: UsersService)
     {
       super( $scope );
 

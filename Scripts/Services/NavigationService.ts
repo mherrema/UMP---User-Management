@@ -22,11 +22,13 @@ module UMPApp
   {
     currentRoute: INavItem;
     shouldShowButton: boolean;
+    inUserEdit: boolean;
 
     constructor()
     {
       this.currentRoute = {name:""};
       this.shouldShowButton = false;
+      this.inUserEdit = false;
     }
 
     setCurrentRoute(item: INavItem): void
@@ -38,6 +40,13 @@ module UMPApp
       }
       else{
         this.shouldShowButton = false;
+      }
+
+      if(item.name == "Edit User" || item.name == "New User"){
+        this.inUserEdit = true;
+      }
+      else{
+        this.inUserEdit = false;
       }
       console.log("Setting route: " + this.currentRoute.name);
     }

@@ -20,15 +20,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.13.2/select.js"></script>
+    <script type="text/javascript" src="js/vendors/ui-bootstrap-1.1.0.min.js"></script>
     <script src="js/Services/NavigationService.js"></script>
     <script src="js/Services/UsersService.js"></script>
     <script src="js/Services/TeacherService.js"></script>
     <script src="js/Controllers/BaseController.js"></script>
     <script src="js/Controllers/NavigationController.js"></script>
     <script src="js/Controllers/UsersController.js"></script>
+    <script src="js/Controllers/UserController.js"></script>
     <script src="js/Controllers/TeacherController.js"></script>
     <script src="js/Controllers/BulkUploadController.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 
 <body ng-app="UMPApp" ng-controller="navigationController">
@@ -40,8 +43,10 @@
                     <a href="#/users"><h4 ng-class="{'active': isActive('Users')}">USERS</h4></a>
                     <a href="#/teachers"><h4 ng-class="{'active': isActive('Teachers')}">TEACHERS</h4></a>
                     <a href="#/bulkupload"><h4 ng-class="{'active': isActive('Bulk Upload')}">BULK UPLOAD</h4></a>
-                    <a href="#/user" class="btn  top-button inga-btn inga-btn-positive" ng-if="shouldShowButton">NEW USER</a>
-                    <button class="btn  top-button inga-btn inga-btn-negative" ng-click="clearFilters()" ng-if="filtersActive">Clear Filters</button>
+                    <a href="#/user" class="btn  top-button inga-btn inga-btn-positive ng-animate-disabled" ng-if="shouldShowButton">NEW USER</a>
+                    <button class="btn  top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="filtersActive">Clear Filters</button>
+                    <button class="btn top-button inga-btn inga-btn-positive ng-animate-disabled" ng-click="clearFilters()" ng-if="inUserEdit">Save User</button>
+                    <button class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="inUserEdit">Cancel</button>
                 </div>
             </div>
         </div>

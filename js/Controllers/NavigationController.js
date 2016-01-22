@@ -20,6 +20,9 @@ var UMPApp;
             $scope.$watch(function () { return navService.shouldShowButton; }, function (newValue, oldValue) {
                 $scope.shouldShowButton = newValue;
             });
+            $scope.$watch(function () { return navService.inUserEdit; }, function (newValue, oldValue) {
+                $scope.inUserEdit = newValue;
+            });
             $scope.$watch(function () { return usersService.filtersActive; }, function (newValue, oldValue) {
                 $scope.filtersActive = newValue;
             });

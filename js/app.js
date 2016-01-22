@@ -32,28 +32,22 @@ var UMP;
 })(UMP || (UMP = {}));
 var UMPApp;
 (function (UMPApp) {
-    var myApp = new UMP.Module('UMPApp', ['ngRoute', 'ui.select', 'ngSanitize']);
+    var myApp = new UMP.Module('UMPApp', ['ngRoute', 'ui.select', 'ngSanitize', 'ngAnimate', 'ui.bootstrap']);
     myApp.addController('navigationController', UMPApp.NavigationController);
     myApp.addController('UMPUsersController', UMPApp.UsersController);
+    myApp.addController('UMPUserController', UMPApp.UserController);
     myApp.addController('UMPTeacherController', UMPApp.TeacherController);
     myApp.addController('UMPBulkUploadController', UMPApp.BulkUploadController);
-    // myApp.addController( 'projectListController', ProjectListController );
-    // myApp.addController( 'projectController', ProjectController );
-    // myApp.addController( 'footerController', FooterController );
-    // myApp.addController( 'lifestyleController', LifestyleController );
-    // myApp.addController( 'trustsController', TrustsController );
-    // myApp.addController( 'entitiesController', EntitiesController );
-    // myApp.addController( 'financialsController', FinancialsController );
-    // myApp.addController( 'clientsSettingsController', ClientsSettingsController );
     myApp.addService('navigationService', UMPApp.NavigationService);
     myApp.addService('usersService', UMPApp.UsersService);
     myApp.addService('teacherService', UMPApp.TeacherService);
-    // myApp.addService('projectService', ProjectService);
-    // myApp.addFactory('navigationFactory', NavigationFactory);
     myApp.addRoute("/user", "partials/user.html", "UMPUserController");
     myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
     myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
     myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
+    myApp.app.config(function ($animateProvider) {
+        $animateProvider.classNameFilter(/^(?:(?!ng-animate-disabled).)*$/);
+    });
     myApp.app.directive('rowLink', ['$location', function ($location) {
             return {
                 restrict: 'A',

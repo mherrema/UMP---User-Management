@@ -322,6 +322,36 @@ a:visited.inga-btn-negative:hover {
 .select2-container-active .select2-choice {
   box-shadow: none;
 }
+.edit-user .checkbox-inline-div {
+  display: inline-block;
+}
+.edit-user .checkbox-inline-div .checkbox-inline {
+  padding-left: 0;
+}
+.edit-user .checkbox-inline-div .checkbox-inline input[type=checkbox] {
+  margin: 0;
+  position: absolute;
+  top: -7px;
+  cursor: pointer;
+}
+.edit-user #userAgreement .control-label,
+.edit-user #lockedOut .control-label {
+  padding-left: 20px;
+}
+.edit-user .change-password-text {
+  cursor: pointer;
+  color: #1fbdd5;
+  transition: color 0.2s ease;
+}
+.edit-user .change-password-text:hover {
+  color: #0fadc5;
+}
+.edit-user textarea.form-control {
+  height: 72px;
+}
+.edit-user hr {
+  margin-top: 0;
+}
 .bulk-upload h2 {
   font-size: 18px;
   font-family: "AvenirLTStd-Heavy";

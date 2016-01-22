@@ -1,47 +1,128 @@
-<div class="bootstrap-iso">
- <div class="container-fluid">
-  <div class="row">
-   <div class="col-md-6 col-sm-6 col-xs-12">
-    <form method="post">
-     <div class="form-group ">
-      <label class="control-label requiredField" for="email">
-       Email
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="email" name="email" type="text"/>
-     </div>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="name">
-       Username
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="name" name="name" type="text"/>
-     </div>
-     <div class="form-group ">
-      <label class="control-label " for="message">
-       Comments
-      </label>
-      <textarea class="form-control" cols="40" id="message" name="message" rows="10"></textarea>
-     </div>
-     <div class="form-group ">
-      <label class="control-label " for="text">
-       Password
-      </label>
-      <input class="form-control" id="text" name="text" type="text"/>
-     </div>
-     <div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
-        Submit
-       </button>
-      </div>
-     </div>
-    </form>
-   </div>
-  </div>
- </div>
+<div ng-init="init()" class="edit-user">
+    <hr>
+    <div class="row">
+        <form>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    <label class="control-label requiredField" for="email">
+                        Email
+                    </label>
+                    <input class="form-control" id="email" name="email" type="text" />
+                </div>
+                <div class="form-group ">
+                    <label class="control-label requiredField" for="name">
+                        Username
+                    </label>
+                    <input class="form-control" id="username" name="username" type="text" />
+                </div>
+                <div class="form-group ">
+                    <label class="control-label requiredField" for="name">
+                        First Name
+                    </label>
+                    <input class="form-control" id="firstName" name="firstName" type="text" />
+                </div>
+                <div class="form-group ">
+                    <label class="control-label requiredField" for="name">
+                        Last Name
+                    </label>
+                    <input class="form-control" id="firstName" name="firstName" type="text" />
+                </div>
+                <div class="form-group" id="lockedOut">
+                    <div class="checkbox-inline-div">
+                        <label class="checkbox-inline">
+                            <input name="checkbox" type="checkbox" value="" />
+                        </label>
+                    </div>
+                    <label class="control-label " for="checkbox">
+                        Is Locked Out
+                    </label>
+                </div>
+                <div class="form-group" id="userAgreement">
+                    <div class="checkbox-inline-div">
+                        <label class="checkbox-inline">
+                            <input name="checkbox" type="checkbox" value="" />
+                        </label>
+                    </div>
+                    <label class="control-label " for="checkbox">
+                        Signed User Agreement
+                    </label>
+                </div>
+                <div class="form-group ">
+                    <label class="control-label change-password-text" for="name" ng-click="toggleShowPassword()">
+                        Change Password
+                    </label>
+                </div>
+                <div uib-collapse="hidePasswordFields">
+                    <div class="form-group ">
+                        <label class="control-label requiredField" for="newPassword">
+                            New Password
+                        </label>
+                        <input class="form-control" id="newPassword" name="newPassword" type="password" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label requiredField" for="confirmPassword">
+                            Confirm Password
+                        </label>
+                        <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group ">
+                    <label class="control-label " for="select">
+                        User Type
+                    </label>
+                    <select class="select form-control" id="select" name="select">
+                        <option value="First Choice">
+                            First Choice
+                        </option>
+                        <option value="Second Choice">
+                            Second Choice
+                        </option>
+                        <option value="Third Choice">
+                            Third Choice
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group ">
+                    <label class="control-label ">
+                        Additional Roles
+                    </label>
+                    <div class=" ">
+                        <div class="checkbox">
+                            <label class="checkbox">
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Creator" /> InGA Assessment Creator
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox">
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Score Entry" /> InGA Assessment Score Entry
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox">
+                                <input name="checkbox1" type="checkbox" value="UMP User" /> UMP User
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox">
+                                <input name="checkbox1" type="checkbox" value="Cohort Builder" /> Cohort Builder
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox">
+                                <input name="checkbox1" type="checkbox" value="Cohort Publisher" /> Cohort Publisher
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="control-label " for="message">
+                        Comments
+                    </label>
+                    <textarea class="form-control" cols="40" id="message" name="message" rows="10"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

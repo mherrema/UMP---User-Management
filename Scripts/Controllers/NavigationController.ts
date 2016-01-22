@@ -14,6 +14,7 @@ module UMPApp
     isActive: Function;
     filtersActive: boolean;
     shouldShowButton: boolean;
+    inUserEdit: boolean;
   }
 
   export class NavigationController extends BaseController.Controller
@@ -39,6 +40,11 @@ module UMPApp
       $scope.$watch(() => navService.shouldShowButton,
       (newValue: boolean, oldValue: boolean) => {
         $scope.shouldShowButton = newValue;
+      });
+
+      $scope.$watch(() => navService.inUserEdit,
+      (newValue: boolean, oldValue: boolean) => {
+        $scope.inUserEdit = newValue;
       });
 
       $scope.$watch(() => usersService.filtersActive,

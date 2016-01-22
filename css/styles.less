@@ -360,6 +360,43 @@ a:visited.inga-btn-negative:hover {
     }
 }
 
+.edit-user {
+    .checkbox-inline-div {
+        display: inline-block;
+        .checkbox-inline {
+            padding-left: 0;
+            input[type=checkbox] {
+                margin: 0;
+                position: absolute;
+                top: -7px;
+                cursor: pointer;
+            }
+        }
+    }
+    #userAgreement,
+    #lockedOut {
+        .control-label {
+            padding-left: 20px;
+        }
+    }
+    .change-password-text {
+        cursor: pointer;
+        color: #1fbdd5;
+        transition: color 0.2s ease;
+        &:hover {
+            color: #0fadc5;
+        }
+    }
+    textarea {
+        &.form-control {
+            height: 72px;
+        }
+    }
+    hr {
+        margin-top: 0;
+    }
+}
+
 .bulk-upload {
     h2 {
         font-size: 18px;
