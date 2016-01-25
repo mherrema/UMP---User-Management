@@ -14,6 +14,7 @@ var UMPApp;
             var controller = this;
             $scope.init = function () {
                 navService.setCurrentRoute({ name: "Teacher Lookup" });
+                navService.updateUserFilter("", { id: 0, name: "" }, { id: 0, name: "" });
                 $scope.districtArray = [
                     { id: 0, name: 'Select District' },
                     { id: 1, name: 'first' },
@@ -24,12 +25,12 @@ var UMPApp;
                 ];
                 $scope.selectedDistrict = $scope.districtArray[0];
                 $scope.schoolArray = [
-                    { id: 0, name: 'Select School' },
-                    { id: 1, name: 'first' },
-                    { id: 2, name: 'second' },
-                    { id: 3, name: 'third' },
-                    { id: 4, name: 'fourth' },
-                    { id: 5, name: 'fifth' },
+                    { id: 0, name: 'Select School', districtId: 1 },
+                    { id: 1, name: 'first', districtId: 1 },
+                    { id: 2, name: 'second', districtId: 1 },
+                    { id: 3, name: 'third', districtId: 1 },
+                    { id: 4, name: 'fourth', districtId: 1 },
+                    { id: 5, name: 'fifth', districtId: 1 },
                 ];
                 $scope.selectedSchool = $scope.schoolArray[0];
                 this.searchInput = "";
@@ -66,8 +67,8 @@ var UMPApp;
             $scope.$watch(function () { return teacherService.shouldClearFilters; }, function (newValue, oldValue) {
                 if (newValue) {
                     $scope.searchInput = "";
-                    $scope.selectedDistrict = { id: 0, name: "Select District" };
-                    $scope.selectedSchool = { id: 0, name: "Select School" };
+                    // $scope.selectedDistrict = {id: 0, name: "Select District"};
+                    // $scope.selectedSchool = {id: 0, name: "Select School"};
                     teacherService.clearedFilters();
                 }
             });
@@ -87,7 +88,7 @@ var UMPApp;
         }
         TeacherController.$inject = ['$scope', 'navigationService', 'teacherService'];
         return TeacherController;
-    })(BaseController.Controller);
+    }(BaseController.Controller));
     UMPApp.TeacherController = TeacherController;
 })(UMPApp || (UMPApp = {}));
 //# sourceMappingURL=TeacherController.js.map

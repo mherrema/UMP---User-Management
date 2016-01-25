@@ -87,6 +87,15 @@ module UMPApp
           lockedOut: "No",
           roles: "Byron Center School Users"
         }];
+        if(navService.currentUserFilter.searchInput != ""){
+          $scope.searchInput = navService.currentUserFilter.searchInput;
+        }
+        if(navService.currentUserFilter.district.id != 0){
+          $scope.selectedDistrict = navService.currentUserFilter.district;
+        }
+        if(navService.currentUserFilter.userType.id != 0){
+          $scope.selectedUserType = navService.currentUserFilter.userType;
+        }
       }
 
       $scope.$watch(() => usersService.shouldClearFilters,
@@ -106,7 +115,7 @@ module UMPApp
 
       $scope.searchUsers = function(){
         console.log("searching!");
-        usersService.searchUsers($scope.searchInput, $scope.selectedDistrict.id, $scope.selectedUserType.id);
+        usersService.searchUsers($scope.searchInput, $scope.selectedDistrict, $scope.selectedUserType);
       }
 
       $scope.selectDistrict = function(item, model){

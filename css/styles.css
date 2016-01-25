@@ -48,9 +48,6 @@ h5 {
   margin-bottom: 20px;
   min-width: 210px;
 }
-.inga-table.row-link tr {
-  cursor: pointer;
-}
 .inga-table.row-link tr:hover td {
   transition: background 0.1s ease;
   background: #e4f5f9;
@@ -322,6 +319,9 @@ a:visited.inga-btn-negative:hover {
 .select2-container-active .select2-choice {
   box-shadow: none;
 }
+input[type=checkbox] {
+  cursor: pointer;
+}
 .edit-user .checkbox-inline-div {
   display: inline-block;
 }
@@ -332,11 +332,17 @@ a:visited.inga-btn-negative:hover {
   margin: 0;
   position: absolute;
   top: -7px;
-  cursor: pointer;
+}
+.edit-user #userAgreement,
+.edit-user #lockedOut {
+  margin-bottom: 0;
 }
 .edit-user #userAgreement .control-label,
 .edit-user #lockedOut .control-label {
   padding-left: 20px;
+}
+.edit-user #userAgreement {
+  padding-bottom: 20px;
 }
 .edit-user .change-password-text {
   cursor: pointer;
@@ -351,6 +357,22 @@ a:visited.inga-btn-negative:hover {
 }
 .edit-user hr {
   margin-top: 0;
+}
+.edit-user .select2-container-multi .select2-choices {
+  border-radius: 4px;
+  box-shadow: none;
+  border-color: #ccc;
+  background-image: none;
+  min-height: 32px;
+}
+.edit-user .select2-container-multi .select2-choices .select2-search-field input {
+  padding-left: 8px;
+  font-family: inherit;
+}
+.edit-user .select2-container-multi .select2-choices .select2-search-choice {
+  margin-top: 5px;
+  background-image: none;
+  background-color: #fff;
 }
 .bulk-upload h2 {
   font-size: 18px;

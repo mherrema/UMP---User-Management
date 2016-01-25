@@ -6,7 +6,7 @@ var UMP;
         function Module(name, modules) {
             this.app = angular.module(name, modules);
             this.app.config(function ($routeProvider) {
-                $routeProvider.otherwise({ redirectTo: '/users' });
+                // $routeProvider.otherwise({redirectTo:'/users'});
             });
         }
         Module.prototype.addController = function (name, controller) {
@@ -27,7 +27,7 @@ var UMP;
             });
         };
         return Module;
-    })();
+    }());
     UMP.Module = Module;
 })(UMP || (UMP = {}));
 var UMPApp;
@@ -42,6 +42,7 @@ var UMPApp;
     myApp.addService('usersService', UMPApp.UsersService);
     myApp.addService('teacherService', UMPApp.TeacherService);
     myApp.addRoute("/user", "partials/user.html", "UMPUserController");
+    myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
     myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
     myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
     myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
@@ -54,7 +55,6 @@ var UMPApp;
                 link: function (scope, element, attr) {
                     element.attr('style', 'cursor:pointer');
                     element.on('click', function () {
-                        console.log(attr.rowLink);
                         $location.path(attr.rowLink);
                         scope.$apply();
                     });

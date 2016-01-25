@@ -40,7 +40,7 @@ var UMPApp;
             this.shouldClearFilters = false;
         };
         return TeacherService;
-    })();
+    }());
     UMPApp.TeacherService = TeacherService;
 })(UMPApp || (UMPApp = {}));
 //# sourceMappingURL=TeacherService.js.map

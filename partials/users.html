@@ -48,7 +48,7 @@
                     <th></th>
                 </tr>
                 <tr ng-if="users && users.length == 0"><td colspan="7">No Users</td></tr>
-                <tr ng-repeat="user in users" row-link="#/user/{{user.id}}">
+                <tr ng-repeat="user in users" row-link="/user/{{user.id}}">
                   <td>{{user.name}}</td>
                   <td>{{user.username}}</td>
                   <td>{{user.email}}</td>

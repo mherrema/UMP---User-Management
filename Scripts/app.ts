@@ -11,7 +11,7 @@ module UMP
     {
       this.app = angular.module( name, modules );
       this.app.config(function($routeProvider){
-        $routeProvider.otherwise({redirectTo:'/users'});
+        // $routeProvider.otherwise({redirectTo:'/users'});
       })
     }
 
@@ -40,6 +40,10 @@ module UMP
       });
     }
   }
+
+  export interface IRouteParams extends ng.route.IRouteParamsService {
+    userKey:string;
+ }
 }
 
 module UMPApp
@@ -54,6 +58,7 @@ module UMPApp
   myApp.addService('usersService', UsersService);
   myApp.addService('teacherService', TeacherService);
   myApp.addRoute("/user", "partials/user.html", "UMPUserController");
+  myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
   myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
   myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
   myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
@@ -66,7 +71,6 @@ module UMPApp
       link: function (scope, element, attr) {
         element.attr('style', 'cursor:pointer');
         element.on('click', function(){
-          console.log(attr.rowLink);
           $location.path(attr.rowLink);
           scope.$apply();
         });

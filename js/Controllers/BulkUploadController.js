@@ -12,21 +12,14 @@ var UMPApp;
         function BulkUploadController($scope, navService) {
             _super.call(this, $scope);
             var controller = this;
-            // navService.goToMainNav();
             $scope.init = function () {
                 navService.setCurrentRoute({ name: "Bulk Upload" });
-                // $scope.activityItems = activityService.getActivityItems();
-                // navService.setCurrentRoute({ route: {name: 'Activity', url: "#/activity"}});
-                // $scope.actionsShown = new Array < boolean >();
-                // $scope.activityItems.forEach(s => {
-                //   $scope.actionsShown.push(false);
-                // });
-                // controller.setActionsShown($scope.actionsShown);
+                navService.updateUserFilter("", { id: 0, name: "" }, { id: 0, name: "" });
             };
         }
         BulkUploadController.$inject = ['$scope', 'navigationService'];
         return BulkUploadController;
-    })(BaseController.Controller);
+    }(BaseController.Controller));
     UMPApp.BulkUploadController = BulkUploadController;
 })(UMPApp || (UMPApp = {}));
 //# sourceMappingURL=BulkUploadController.js.map

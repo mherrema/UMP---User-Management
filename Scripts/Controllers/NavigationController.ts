@@ -4,12 +4,15 @@
 module UMPApp
 {
 
+
+
   export interface INavigationScope extends BaseController.IScope
   {
     // activityItems: Array< IActivityItem >;
     // actionsShown: Array< boolean >;
     init: Function;
     clearFilters: Function;
+    postUser: Function;
     currentRoute: INavItem;
     isActive: Function;
     filtersActive: boolean;
@@ -73,6 +76,10 @@ module UMPApp
       $scope.clearFilters = function(){
         usersService.clearFilters();
         teacherService.clearFilters();
+      }
+
+      $scope.postUser = function(){
+        navService.postUser();
       }
     }
 

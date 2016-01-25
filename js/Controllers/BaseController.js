@@ -6,7 +6,7 @@ var BaseController;
             this.scope.events = this;
         }
         return Controller;
-    })();
+    }());
     BaseController.Controller = Controller;
 })(BaseController || (BaseController = {}));
 //# sourceMappingURL=BaseController.js.map

@@ -44,9 +44,9 @@
                     <a href="#/teachers"><h4 ng-class="{'active': isActive('Teachers')}">TEACHERS</h4></a>
                     <a href="#/bulkupload"><h4 ng-class="{'active': isActive('Bulk Upload')}">BULK UPLOAD</h4></a>
                     <a href="#/user" class="btn  top-button inga-btn inga-btn-positive ng-animate-disabled" ng-if="shouldShowButton">NEW USER</a>
-                    <button class="btn  top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="filtersActive">Clear Filters</button>
-                    <button class="btn top-button inga-btn inga-btn-positive ng-animate-disabled" ng-click="clearFilters()" ng-if="inUserEdit">Save User</button>
-                    <button class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="inUserEdit">Cancel</button>
+                    <button class="btn  top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="filtersActive && !inUserEdit">Clear Filters</button>
+                    <button class="btn top-button inga-btn inga-btn-positive ng-animate-disabled" ng-click="postUser()" ng-if="inUserEdit">Save User</button>
+                    <a href="#/users" class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-if="inUserEdit">Cancel</a>
                 </div>
             </div>
         </div>

@@ -1,69 +1,59 @@
 <div ng-init="init()" class="edit-user">
     <hr>
     <div class="row">
-        <form>
+        <div class="col-sm-12" ng-if="errorMessage">
+            <h4 style="color: #ff6a6a">{{errorMessage}}</h4>
+        </div>
+        <form novalidate>
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="form-group ">
                     <label class="control-label requiredField" for="email">
                         Email
                     </label>
-                    <input class="form-control" id="email" name="email" type="text" />
+                    <input ng-model="user.email" class="form-control" id="email" name="email" type="email" required/>
                 </div>
                 <div class="form-group ">
                     <label class="control-label requiredField" for="name">
                         Username
                     </label>
-                    <input class="form-control" id="username" name="username" type="text" />
+                    <input ng-model="user.username" class="form-control" id="username" name="username" type="text" />
                 </div>
                 <div class="form-group ">
                     <label class="control-label requiredField" for="name">
                         First Name
                     </label>
-                    <input class="form-control" id="firstName" name="firstName" type="text" />
+                    <input ng-model="user.firstName" class="form-control" id="firstName" name="firstName" type="text" />
                 </div>
                 <div class="form-group ">
                     <label class="control-label requiredField" for="name">
                         Last Name
                     </label>
-                    <input class="form-control" id="firstName" name="firstName" type="text" />
+                    <input ng-model="user.lastName" class="form-control" id="firstName" name="firstName" type="text" />
                 </div>
-                <div class="form-group" id="lockedOut">
-                    <div class="checkbox-inline-div">
-                        <label class="checkbox-inline">
-                            <input name="checkbox" type="checkbox" value="" />
-                        </label>
-                    </div>
-                    <label class="control-label " for="checkbox">
-                        Is Locked Out
+                <div class="form-group " ng-if="inNewUser">
+                    <label class="control-label requiredField" for="newPassword">
+                        Password
                     </label>
+                    <input ng-model="user.password" class="form-control" id="password" name="password" type="password" />
                 </div>
-                <div class="form-group" id="userAgreement">
-                    <div class="checkbox-inline-div">
-                        <label class="checkbox-inline">
-                            <input name="checkbox" type="checkbox" value="" />
-                        </label>
-                    </div>
-                    <label class="control-label " for="checkbox">
-                        Signed User Agreement
-                    </label>
-                </div>
-                <div class="form-group ">
+
+                <div class="form-group " ng-if="!inNewUser">
                     <label class="control-label change-password-text" for="name" ng-click="toggleShowPassword()">
                         Change Password
                     </label>
                 </div>
-                <div uib-collapse="hidePasswordFields">
+                <div uib-collapse="hidePasswordFields" ng-if="!inNewUser">
                     <div class="form-group ">
                         <label class="control-label requiredField" for="newPassword">
                             New Password
                         </label>
-                        <input class="form-control" id="newPassword" name="newPassword" type="password" />
+                        <input ng-model="newPassword" class="form-control" id="newPassword" name="newPassword" type="password" />
                     </div>
                     <div class="form-group ">
                         <label class="control-label requiredField" for="confirmPassword">
                             Confirm Password
                         </label>
-                        <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" />
+                        <input ng-model="confirmPassword" class="form-control" id="confirmPassword" name="confirmPassword" type="password" />
                     </div>
                 </div>
             </div>
@@ -72,18 +62,101 @@
                     <label class="control-label " for="select">
                         User Type
                     </label>
-                    <select class="select form-control" id="select" name="select">
-                        <option value="First Choice">
-                            First Choice
+                    <select ng-change="selectUserType()" ng-model="user.userType" class="select form-control" id="select" name="select">
+                        <option value="1">
+                            Classroom User
                         </option>
-                        <option value="Second Choice">
-                            Second Choice
+                        <option value="2">
+                            School User
                         </option>
-                        <option value="Third Choice">
-                            Third Choice
+                        <option value="3">
+                            District User
+                        </option>
+                        <option value="4">
+                            ISD User
+                        </option>
+                        <option value="5">
+                            Aggregate Only School User
+                        </option>
+                        <option value="6">
+                            Aggregate Only District User
+                        </option>
+                        <option value="7">
+                            Aggregate Only ISD User
                         </option>
                     </select>
                 </div>
+                <div class="form-group" ng-if="isdUser || districtUser || schoolUser || classroomUser">
+                    <label class="control-label" for="isd-select" >
+                        ISD
+                    </label>
+                    <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="user.isd" ng-change="selectISD()">
+                        <option ng-repeat="option in isdArray" value="{{option.id}}">{{option.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group" ng-if="districtUser || schoolUser || classroomUser">
+                    <label class="control-label" for="district-select">
+                        District
+                    </label>
+                    <ui-select multiple ng-model="$parent.$parent.user.districts" theme="select2" on-remove="removeDistrict($item, $model)" on-select="selectDistrict($item, $model)" ng-disabled="!$parent.$parent.user.isd">
+                        <ui-select-match placeholder="Select district...">
+                            {{$item.name}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.id">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group" ng-if="schoolUser || classroomUser">
+                    <label class="control-label" for="school-select">
+                        School
+                    </label>
+                    <ui-select multiple ng-model="$parent.user.schools" theme="select2" on-select="selectSchool($item, $model)" ng-disabled="!$parent.user.districts || $parent.user.districts.length == 0">
+                        <ui-select-match placeholder="Select school...">
+                            {{$item.name}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in (schoolArray | filter: $select.search) track by item.id">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group" ng-if="classroomUser">
+                    <div ng-repeat="school in user.schools">
+                    <label class="control-label" for="school-teacher-select">
+                        {{school.name}} School Teachers
+                    </label>
+                    <ui-select multiple ng-model="$parent.user.school" theme="select2">
+                        <ui-select-match placeholder="Select school...">
+                            {{$item.name}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in (school.schoolTeachers | filter: $select.search) track by item.id">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                        </div>
+                </div>
+                <div class="form-group" id="lockedOut">
+                    <div class="checkbox-inline-div">
+                        <label class="checkbox-inline">
+                            <input ng-model="user.isLockedOut" name="checkbox" type="checkbox" value="" />
+                        </label>
+                    </div>
+                    <label class="control-label " for="checkbox">
+                        Is Locked Out
+                    </label>
+                </div>
+                {{isLockedOut}}
+                <div class="form-group" id="userAgreement">
+                    <div class="checkbox-inline-div">
+                        <label class="checkbox-inline">
+                            <input ng-model="user.signedUserAgreement" name="checkbox" type="checkbox" value="" />
+                        </label>
+                    </div>
+                    <label class="control-label " for="checkbox">
+                        Signed User Agreement
+                    </label>
+                </div>
+
                 <div class="form-group ">
                     <label class="control-label ">
                         Additional Roles
@@ -91,27 +164,27 @@
                     <div class=" ">
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="InGA Assessment Creator" /> InGA Assessment Creator
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Creator" ng-model="user.additionalRoles.InGAAssessmentCreator" /> InGA Assessment Creator
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="InGA Assessment Score Entry" /> InGA Assessment Score Entry
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Score Entry" ng-model="user.additionalRoles.InGAAssessmentScoreEntry" /> InGA Assessment Score Entry
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="UMP User" /> UMP User
+                                <input name="checkbox1" type="checkbox" value="UMP User" ng-model="user.additionalRoles.UMPUser" /> UMP User
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="Cohort Builder" /> Cohort Builder
+                                <input name="checkbox1" type="checkbox" value="Cohort Builder" ng-model="user.additionalRoles.CohortBuilder" /> Cohort Builder
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="Cohort Publisher" /> Cohort Publisher
+                                <input name="cohortPublisher" type="checkbox" ng-model="user.additionalRoles.CohortPublisher" /> Cohort Publisher
                             </label>
                         </div>
                     </div>
@@ -120,9 +193,10 @@
                     <label class="control-label " for="message">
                         Comments
                     </label>
-                    <textarea class="form-control" cols="40" id="message" name="message" rows="10"></textarea>
+                    <textarea ng-model="user.comments" class="form-control" cols="40" id="message" name="message" rows="10"></textarea>
                 </div>
             </div>
         </form>
+        {{user}}
     </div>
 </div>

@@ -45,10 +45,13 @@ var UMPApp;
                 usersService.clearFilters();
                 teacherService.clearFilters();
             };
+            $scope.postUser = function () {
+                navService.postUser();
+            };
         }
         NavigationController.$inject = ['$scope', 'navigationService', 'usersService', 'teacherService'];
         return NavigationController;
-    })(BaseController.Controller);
+    }(BaseController.Controller));
     UMPApp.NavigationController = NavigationController;
 })(UMPApp || (UMPApp = {}));
 //# sourceMappingURL=NavigationController.js.map

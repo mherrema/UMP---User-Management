@@ -6,6 +6,12 @@ module UMPApp
     url: string,
   }
 
+  export interface ISD
+  {
+    id: number,
+    name: string
+  }
+
   export interface District
   {
     id: number,
@@ -15,7 +21,17 @@ module UMPApp
   export interface School
   {
     id: number,
-    name: string
+    name: string,
+    districtId: number,
+    schoolTeachers?: Array<SchoolTeacher>,
+    selectedTeachers?: Array<SchoolTeacher>
+  }
+
+  export interface SchoolTeacher
+  {
+    id: number,
+    name: string,
+    schoolId: number
   }
 
   export interface UserType
@@ -29,13 +45,18 @@ module UMPApp
     users: Array<IUser>;
     shouldClearFilters: boolean;
     filtersActive: boolean;
-    constructor()
+    navService: NavigationService;
+
+    static $inject = ['navigationService'];
+
+    constructor(navService: NavigationService)
     {
       this.users = new Array<IUser>();
       this.filtersActive = false;
+      this.navService = navService;
     }
 
-    searchUsers(searchInput: string, districtKey: number, userTypeKey: number): void
+    searchUsers(searchInput: string, district: District, userType: UserType): void
     {
       var apiRoute = "/users";
       var filterString = "?";
@@ -44,18 +65,18 @@ module UMPApp
         filterString+= "SearchInput=" + searchInput;
       }
 
-      if(districtKey != 0){
+      if(district.id != 0){
         if(filterString != "?"){
           filterString += "&";
         }
-        filterString += "DistrictKey=" + districtKey;
+        filterString += "DistrictKey=" + district.id;
       }
 
-      if(userTypeKey != 0){
+      if(userType.id != 0){
         if(filterString != "?"){
           filterString += "&";
         }
-        filterString += "UserTypeKey=" + userTypeKey;
+        filterString += "UserTypeKey=" + userType.id;
       }
 
       if(filterString == "?"){
@@ -66,6 +87,8 @@ module UMPApp
         this.filtersActive = true;
       }
 
+      this.navService.updateUserFilter(searchInput, district, userType);
+
       console.log(apiRoute + filterString);
 
     }
@@ -73,6 +96,7 @@ module UMPApp
     clearFilters() :void
     {
       this.shouldClearFilters = true;
+      this.navService.updateUserFilter("", {id: 0, name: ""}, {id: 0, name: ""});
     }
 
     clearedFilters() :void
