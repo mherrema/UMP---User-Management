@@ -45,17 +45,19 @@
                     <th>
                         <div class="heading-title" ng-click="toggleHeading4()">Roles</div>
                     </th>
-                    <th></th>
+<!--                    <th></th>-->
                 </tr>
                 <tr ng-if="users && users.length == 0"><td colspan="7">No Users</td></tr>
-                <tr ng-repeat="user in users" row-link="/user/{{user.id}}">
-                  <td>{{user.name}}</td>
-                  <td>{{user.username}}</td>
-                  <td>{{user.email}}</td>
-                  <td>{{user.lastLogin}}</td>
-                  <td>{{user.lockedOut}}</td>
-                  <td>{{user.roles}}</td>
-                  <td></td>
+                <tr ng-repeat="user in users" row-link="/user/{{user.UserKey}}">
+                  <td>{{user.FirstName}} {{user.LastName}}</td>
+                  <td>{{user.Username}}</td>
+                  <td>{{user.Email}}</td>
+                  <td>{{user.LastActivityDate | date:'medium'}}</td>
+                  <td>{{user.IsLockedOut}}</td>
+                  <td>
+                    <span ng-if="user.Roles.length > 3">{{user.Roles.length}} Roles</span>
+                    <span ng-repeat="role in user.Roles" ng-if="user.Roles.length < 4">{{role}}, </span></td>
+<!--                  <td></td>-->
                 </tr>
             </table>
         </div>

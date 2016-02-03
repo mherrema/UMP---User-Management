@@ -6,12 +6,14 @@ var UMPApp;
     //   url: string,
     // }
     var NavigationService = (function () {
-        function NavigationService() {
+        function NavigationService($http) {
             this.currentRoute = { name: "" };
             this.shouldShowButton = false;
             this.shouldPostUser = false;
             this.inUserEdit = false;
-            this.currentUserFilter = { searchInput: "", district: { id: 0, name: "" }, userType: { id: 0, name: "" } };
+            this.inUserNew = false;
+            this.currentUserFilter = { searchInput: "", district: { id: 0, name: "" }, userType: { IgorUserRoleKey: 0, Name: "" } };
+            this.$http = $http;
         }
         NavigationService.prototype.setCurrentRoute = function (item) {
             console.log(item);
@@ -24,6 +26,12 @@ var UMPApp;
             }
             if (item.name == "Edit User" || item.name == "Add User") {
                 this.inUserEdit = true;
+                if (item.name == "Add User") {
+                    this.inUserNew = true;
+                }
+                else {
+                    this.inUserNew = false;
+                }
             }
             else {
                 this.inUserEdit = false;
@@ -35,6 +43,14 @@ var UMPApp;
         };
         NavigationService.prototype.postUser = function () {
             this.shouldPostUser = true;
+        };
+        NavigationService.prototype.getMyUserType = function () {
+            this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/UserType/')
+                .then(function (response) {
+                // this.users = response;
+                return response.data;
+            });
+            return this.promise;
         };
         return NavigationService;
     }());

@@ -11,7 +11,7 @@ module UMP
     {
       this.app = angular.module( name, modules );
       this.app.config(function($routeProvider){
-        // $routeProvider.otherwise({redirectTo:'/users'});
+        $routeProvider.otherwise({redirectTo:'/users'});
       })
     }
 

@@ -6,7 +6,7 @@ var UMP;
         function Module(name, modules) {
             this.app = angular.module(name, modules);
             this.app.config(function ($routeProvider) {
-                // $routeProvider.otherwise({redirectTo:'/users'});
+                $routeProvider.otherwise({ redirectTo: '/users' });
             });
         }
         Module.prototype.addController = function (name, controller) {

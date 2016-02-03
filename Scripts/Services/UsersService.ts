@@ -2,14 +2,24 @@ module UMPApp
 {
   export interface IUser
   {
-    name: string,
-    url: string,
+    LastActivityDate: string,
+    UserName: string,
+    LoweredUserName: string,
+    aspnet_Membership: Object,
+    aspnet_Profile: aspnet_Profile,
+    Name: string
+  }
+
+  export interface aspnet_Profile
+  {
+    PropertyNames: string,
+    PropertyValuesString: string
   }
 
   export interface ISD
   {
-    id: number,
-    name: string
+    ISDKey: number,
+    ISDName: string
   }
 
   export interface District
@@ -20,25 +30,25 @@ module UMPApp
 
   export interface School
   {
-    id: number,
-    name: string,
-    districtId: number,
+    SchoolKey: number,
+    SchoolName: string,
+    DistrictKey: number,
     schoolTeachers?: Array<SchoolTeacher>,
     selectedTeachers?: Array<SchoolTeacher>
   }
 
   export interface SchoolTeacher
   {
-    id: number,
-    name: string,
-    schoolId: number
+    SchoolTeacherKey: number,
+    SchoolTeacherName: string,
+    SchoolKey: number
   }
-
-  export interface UserType
-  {
-    id: number,
-    name: string
-  }
+`  //
+  // export interface UserType
+  // {
+  //   id: number,
+  //   name: string
+  // }`
 
   export class UsersService
   {
@@ -46,17 +56,20 @@ module UMPApp
     shouldClearFilters: boolean;
     filtersActive: boolean;
     navService: NavigationService;
+    $http: ng.IHttpService;
+    promise: ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>;
 
-    static $inject = ['navigationService'];
+    static $inject = ['$http', 'navigationService'];
 
-    constructor(navService: NavigationService)
+    constructor($http: ng.IHttpService, navService: NavigationService)
     {
       this.users = new Array<IUser>();
       this.filtersActive = false;
       this.navService = navService;
+      this.$http = $http;
     }
 
-    searchUsers(searchInput: string, district: District, userType: UserType): void
+    searchUsers(searchInput: string, district: District, userType: UserType): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
     {
       var apiRoute = "/users";
       var filterString = "?";
@@ -72,11 +85,11 @@ module UMPApp
         filterString += "DistrictKey=" + district.id;
       }
 
-      if(userType.id != 0){
+      if(userType.IgorUserRoleKey != 0){
         if(filterString != "?"){
           filterString += "&";
         }
-        filterString += "UserTypeKey=" + userType.id;
+        filterString += "UserTypeKey=" + userType.IgorUserRoleKey;
       }
 
       if(filterString == "?"){
@@ -91,18 +104,60 @@ module UMPApp
 
       console.log(apiRoute + filterString);
 
+      this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/')
+      .then(function(response){
+        this.users = response;
+        return response.data;
+      });
+
+      return this.promise;
+    }
+
+    searchUser(userKey: string): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
+    {
+      console.log("in searchUser");
+      console.log('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/' + userKey);
+      this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/' + userKey)
+      .then(function(response){
+        // this.users = response;
+        return response.data;
+      });
+
+      return this.promise;
     }
 
     clearFilters() :void
     {
       this.shouldClearFilters = true;
-      this.navService.updateUserFilter("", {id: 0, name: ""}, {id: 0, name: ""});
+      this.navService.updateUserFilter("", {id: 0, name: ""}, {IgorUserRoleKey: 0, Name: ""});
     }
 
     clearedFilters() :void
     {
       this.filtersActive = false;
       this.shouldClearFilters = false;
+    }
+
+    getISDList() :ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
+    {
+      var promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/ISD/')
+      .then(function(response){
+        // this.users = response;
+        return response.data;
+      });
+
+      return promise;
+    }
+
+    getDistrictList(isdKey: string) :ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
+    {
+      var promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Districts/' + isdKey)
+      .then(function(response){
+        // this.users = response;
+        return response.data;
+      });
+
+      return promise;
     }
   }
 }

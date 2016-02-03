@@ -6,19 +6,27 @@ module UMPApp
 
   export interface User
   {
-    email: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    userType: string;
-    isLockedOut: boolean;
-    signedUserAgreement: boolean;
-    additionalRoles: AdditionalRoles;
-    comments: string;
-    districts: Array<District>;
-    isd: ISD;
-    schools: Array<School>;
+    Email: string;
+    Username: string;
+    FirstName: string;
+    LastName: string;
+    Password: string;
+    UserType: UserType;
+    IsLockedOut: boolean;
+    SignedUserAgreement: boolean;
+    AdditionalRoles: AdditionalRoles;
+    Comments: string;
+    Districts: Array<District>;
+    ISD: ISD;
+    Schools: Array<School>;
+    Roles: Array<string>;
+    Teachers: Array<SchoolTeacher>
+  }
+
+  export interface UserType
+  {
+    IgorUserRoleKey: number;
+    Name: string;
   }
 
   export interface AdditionalRoles{
@@ -51,7 +59,7 @@ module UMPApp
     selectDistrict: Function;
     selectSchool: Function;
     removeDistrict: Function;
-    isd: ISD;
+    ISD: ISD;
     districts: Array<District>;
     schools: Array<School>;
     isLockedOut: boolean;
@@ -61,6 +69,8 @@ module UMPApp
     checkValidity: Function;
     postUser: Function;
     errorMessage: string;
+    selectSchoolTeacher: Function;
+    setupUser: Function;
   }
 
   export class UserController extends BaseController.Controller
@@ -78,11 +88,24 @@ module UMPApp
         if($routeParams.userKey != "" && $routeParams.userKey != undefined){
           navService.setCurrentRoute({name: "Edit User"});
           $scope.inNewUser = false;
+          usersService.searchUser($routeParams.userKey).then(function(d: User){
+            console.log(d);
+            $scope.user = d;
+            $scope.setupUser();
+          });
+          usersService.getISDList().then(function(d: Array<ISD>){
+            console.log(d);
+            $scope.isdArray = d;
+            if($scope.user != null){
+              $scope.ISD = $scope.user.ISD;
+            }
+          })
         }
         else{
           navService.setCurrentRoute({name: "Add User"});
           $scope.inNewUser = true;
         }
+
         $scope.hidePasswordFields = true;
         $scope.additionalRoles = {
           InGAAssessmentCreator: false,
@@ -91,28 +114,84 @@ module UMPApp
           CohortBuilder: false,
           CohortPublisher: false
         };
-        $scope.districtArray = [
-          {id: 1, name: 'first'},
-          {id: 2, name: 'second'},
-          {id: 3, name: 'third'},
-          {id: 4, name: 'fourth'},
-          {id: 5, name: 'fifth'},
-        ];
-        $scope.isdArray = [
-          {id: 1, name: 'first'},
-          {id: 2, name: 'second'},
-          {id: 3, name: 'third'},
-          {id: 4, name: 'fourth'},
-          {id: 5, name: 'fifth'},
-        ];
-        $scope.schoolArray = [
-          {id: 1, name: 'first', districtId: 1},
-          {id: 2, name: 'second', districtId: 1},
-          {id: 3, name: 'third', districtId: 1},
-          {id: 4, name: 'fourth', districtId: 1},
-          {id: 5, name: 'fifth', districtId: 1},
-        ];
+        $scope.districtArray = [];
+        $scope.isdArray = [];
+        $scope.schoolArray = [];
         // $scope.user.districts = [];
+      }
+
+      $scope.setupUser = function(){
+        $scope.user.AdditionalRoles = {
+          InGAAssessmentCreator: false,
+          InGAAssessmentScoreEntry: false,
+          UMPUser: false,
+          CohortBuilder: false,
+          CohortPublisher: false
+        }
+        if($scope.user.Roles.indexOf("UMP User Role") > -1){
+          $scope.user.AdditionalRoles.UMPUser = true;
+        }
+        if($scope.user.Roles.indexOf("InGA Assessment Creator Role") > -1){
+          $scope.user.AdditionalRoles.InGAAssessmentCreator = true;
+        }
+        if($scope.user.Roles.indexOf("InGA Assessment Score Entry Role") > -1){
+          $scope.user.AdditionalRoles.InGAAssessmentScoreEntry = true;
+        }
+        if($scope.user.Roles.indexOf("Cohort Builder Role") > -1){
+          $scope.user.AdditionalRoles.CohortBuilder = true;
+        }
+        if($scope.user.Roles.indexOf("Cohort Publisher Role") > -1){
+          $scope.user.AdditionalRoles.CohortPublisher = true;
+        }
+
+        $scope.userType = String($scope.user.UserType.IgorUserRoleKey);
+        $scope.selectUserType();
+
+        // if($scope.isdArray.length == 0){
+        //   $scope.isdArray.push($scope.user.ISD);
+        // }
+        $scope.ISD = $scope.user.ISD;
+
+        if($scope.districtArray.length == 0){
+          usersService.getDistrictList(String($scope.ISD.ISDKey)).then(function(d: Array<District>){
+            console.log(d);
+            $scope.districtArray = d;
+            // remove already selected
+            // for(var i = 0; i< $scope.user.Districts.length; i++){
+            //   if($scope.districtArray.indexOf($scope.user.Districts[i]) > -1){
+            //     $scope.districtArray.splice($scope.districtArray.indexOf($scope.user.Districts[i]), 1);
+            //   }
+            // }
+
+          })
+          for(var i = 0; i< $scope.user.Districts.length; i++){
+            $scope.districtArray.push($scope.user.Districts[i]);
+          }
+        }
+
+        if($scope.schoolArray.length == 0){
+          for(var i = 0; i< $scope.user.Schools.length; i++){
+            $scope.schoolArray.push($scope.user.Schools[i]);
+          }
+          // $scope.ISD = String($scope.user.ISD.ISDKey);
+        }
+
+        if($scope.user.Teachers.length > 0){
+          for(var i = 0; i< $scope.user.Teachers.length; i++){
+            for(var j = 0; j< $scope.user.Schools.length; j++){
+              if($scope.user.Teachers[i].SchoolKey == $scope.user.Schools[j].SchoolKey){
+                if($scope.user.Schools[j].schoolTeachers == undefined){
+                  $scope.user.Schools[j].schoolTeachers = [];
+                }
+                if($scope.user.Schools[j].selectedTeachers == undefined){
+                  $scope.user.Schools[j].selectedTeachers = [];
+                }
+                $scope.user.Schools[j].schoolTeachers.push($scope.user.Teachers[i]);
+                $scope.user.Schools[j].selectedTeachers.push($scope.user.Teachers[i]);
+              }
+            }
+          }
+        }
       }
 
       $scope.$watch(() => navService.shouldPostUser,
@@ -129,8 +208,8 @@ module UMPApp
       }
 
       $scope.selectUserType = function(){
-        console.log($scope.user.userType);
-        var userType = $scope.user.userType;
+        // console.log($scope.user.userType);
+        var userType = $scope.userType;
         $scope.resetSelectedOptions();
         if(userType == "4" || userType == "7"){
           $scope.isdUser = true;
@@ -157,45 +236,62 @@ module UMPApp
       };
 
       $scope.selectISD = function(){
-        $scope.user.districts = [];
-        $scope.user.schools = [];
+        $scope.user.Districts = [];
+        $scope.user.Schools = [];
         console.log("should update districts");
+        usersService.getDistrictList(String($scope.ISD.ISDKey)).then(function(d: Array<District>){
+          console.log(d);
+          $scope.districtArray = d;
+          // remove already selected
+          // for(var i = 0; i< $scope.user.Districts.length; i++){
+          //   if($scope.districtArray.indexOf($scope.user.Districts[i]) > -1){
+          //     $scope.districtArray.splice($scope.districtArray.indexOf($scope.user.Districts[i]), 1);
+          //   }
+          // }
+
+        })
       }
 
       $scope.selectDistrict = function(item, model){
         // $scope.user.schools = [];
         $scope.schoolArray = [
-          {id: 1, name: 'first', districtId: 1},
-          {id: 2, name: 'second', districtId: 1},
-          {id: 3, name: 'third', districtId: 1},
-          {id: 4, name: 'fourth', districtId: 1},
-          {id: 5, name: 'fifth', districtId: 1},
+          // {id: 1, name: 'firstSchool', districtId: 1},
+          // {id: 2, name: 'secondSchool', districtId: 1},
+          // {id: 3, name: 'thirdSchool', districtId: 1},
+          // {id: 4, name: 'fourthSchool', districtId: 1},
+          // {id: 5, name: 'fifthSchool', districtId: 1},
         ];
+
+        /**********
+        *
+        *     Get all schools with selected districts, filter out already selected
+        *
+        ***********/
       }
 
       $scope.removeDistrict = function(item, model){
         // var schoolsToRemove = [];
-        for(var i = 0; i < $scope.user.schools.length; i++){
-          if($scope.user.schools[i].districtId == item.id){
+        for(var i = 0; i < $scope.user.Schools.length; i++){
+          if($scope.user.Schools[i].DistrictKey == item.DistrictKey){
             // schoolsToRemove.push($scope.user.schools[i].id);
-            $scope.user.schools.splice(i, 1);
+            $scope.user.Schools.splice(i, 1);
           }
         }
       }
 
       $scope.selectSchool = function(item, model){
-        console.log(item);
-        console.log($scope.user.schools);
-        for(var i = 0; i< $scope.user.schools.length; i++){
-          if($scope.user.schools[i].name == item.name){
-            if(!$scope.user.schools[i].schoolTeachers || $scope.user.schools[i].schoolTeachers.length == 0){
+        // console.log(item);
+        // console.log($scope.user.schools);
+        for(var i = 0; i< $scope.user.Schools.length; i++){
+          if($scope.user.Schools[i].SchoolName == item.name){
+            if(!$scope.user.Schools[i].schoolTeachers || $scope.user.Schools[i].schoolTeachers.length == 0){
               //search for teachers at that school
-              $scope.user.schools[i].schoolTeachers = [
-                {id: 1, name: 'first', schoolId: 1},
-                {id: 2, name: 'second', schoolId: 1},
-                {id: 3, name: 'third', schoolId: 1},
-                {id: 4, name: 'fourth', schoolId: 1},
-                {id: 5, name: 'fifth', schoolId: 1}
+              $scope.user.Schools[i].schoolTeachers = [
+                // {id: 1, name: 'firstTeacher', schoolId: 1},
+                // {id: 2, name: 'secondTeacher', schoolId: 1},
+                // {id: 3, name: 'thirdTeacher', schoolId: 1},
+                // {id: 4, name: 'fourthTeacher', schoolId: 1},
+                // {id: 5, name: 'fifthTeacher', schoolId: 1}
               ];
             }
           }
@@ -210,40 +306,40 @@ module UMPApp
           $scope.errorMessage = "Please fill out the form";
           return false;
         }
-        if(!user.email){
+        if(!user.Email){
           $scope.errorMessage = "Invalid Email Format";
           return false;
         }
-        if(!user.username || user.username == "" || !user.firstName || user.firstName == "" || !user.lastName || user.lastName == ""){
+        if(!user.Username || user.Username == "" || !user.FirstName || user.FirstName == "" || !user.LastName || user.LastName == ""){
           $scope.errorMessage = "One of the name fields are empty";
           return false;
         }
-        if($scope.inNewUser && user.password == ""){
+        if($scope.inNewUser && user.Password == ""){
           $scope.errorMessage = "Password is empty";
           return false;
         }
-        if(user.userType == undefined){
+        if(user.UserType == undefined){
           $scope.errorMessage = "Select A User Type";
           return false;
         }
-        if(user.userType == "4" || user.userType == "7"){
-          if(!user.isd){
-            $scope.errorMessage = "You have to belong to an ISD";
-            return false;
-          }
-        }
-        if(user.userType == "3" || user.userType == "6"){
-          if(!user.districts || user.districts.length == 0){
-            $scope.errorMessage = "You have to belong to an District";
-            return false;
-          }
-        }
-        if(user.userType == "2" || user.userType == "5"){
-          if(!user.schools || user.schools.length == 0){
-            $scope.errorMessage = "You have to belong to an School";
-            return false;
-          }
-        }
+        // if(user.UserType == "4" || user.UserType == "7"){
+        //   if(!user.isd){
+        //     $scope.errorMessage = "You have to belong to an ISD";
+        //     return false;
+        //   }
+        // }
+        // if(user.UserType == "3" || user.UserType == "6"){
+        //   if(!user.districts || user.districts.length == 0){
+        //     $scope.errorMessage = "You have to belong to an District";
+        //     return false;
+        //   }
+        // }
+        // if(user.UserType == "2" || user.UserType == "5"){
+        //   if(!user.schools || user.schools.length == 0){
+        //     $scope.errorMessage = "You have to belong to an School";
+        //     return false;
+        //   }
+        // }
         return true;
         /////////// classroom user login - ask about
         // if(user.userType == "1"){
@@ -262,6 +358,18 @@ module UMPApp
         else{
 
         }
+      }
+
+      $scope.selectSchoolTeacher = function(item, school){
+        console.log(item);
+        console.log(school);
+        if(!school.selectedTeachers){
+          school.selectedTeachers = [item];
+        }
+        else{
+          school.selectedTeachers.push(item);
+        }
+        // for(var i = 0; i< )
       }
 
     }

@@ -1,10 +1,12 @@
 var UMPApp;
 (function (UMPApp) {
+    "  //\n  // export interface UserType\n  // {\n  //   id: number,\n  //   name: string\n  // }";
     var UsersService = (function () {
-        function UsersService(navService) {
+        function UsersService($http, navService) {
             this.users = new Array();
             this.filtersActive = false;
             this.navService = navService;
+            this.$http = $http;
         }
         UsersService.prototype.searchUsers = function (searchInput, district, userType) {
             var apiRoute = "/users";
@@ -18,11 +20,11 @@ var UMPApp;
                 }
                 filterString += "DistrictKey=" + district.id;
             }
-            if (userType.id != 0) {
+            if (userType.IgorUserRoleKey != 0) {
                 if (filterString != "?") {
                     filterString += "&";
                 }
-                filterString += "UserTypeKey=" + userType.id;
+                filterString += "UserTypeKey=" + userType.IgorUserRoleKey;
             }
             if (filterString == "?") {
                 filterString = "";
@@ -33,16 +35,48 @@ var UMPApp;
             }
             this.navService.updateUserFilter(searchInput, district, userType);
             console.log(apiRoute + filterString);
+            this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/')
+                .then(function (response) {
+                this.users = response;
+                return response.data;
+            });
+            return this.promise;
+        };
+        UsersService.prototype.searchUser = function (userKey) {
+            console.log("in searchUser");
+            console.log('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/' + userKey);
+            this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/' + userKey)
+                .then(function (response) {
+                // this.users = response;
+                return response.data;
+            });
+            return this.promise;
         };
         UsersService.prototype.clearFilters = function () {
             this.shouldClearFilters = true;
-            this.navService.updateUserFilter("", { id: 0, name: "" }, { id: 0, name: "" });
+            this.navService.updateUserFilter("", { id: 0, name: "" }, { IgorUserRoleKey: 0, Name: "" });
         };
         UsersService.prototype.clearedFilters = function () {
             this.filtersActive = false;
             this.shouldClearFilters = false;
         };
-        UsersService.$inject = ['navigationService'];
+        UsersService.prototype.getISDList = function () {
+            var promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/ISD/')
+                .then(function (response) {
+                // this.users = response;
+                return response.data;
+            });
+            return promise;
+        };
+        UsersService.prototype.getDistrictList = function (isdKey) {
+            var promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Districts/' + isdKey)
+                .then(function (response) {
+                // this.users = response;
+                return response.data;
+            });
+            return promise;
+        };
+        UsersService.$inject = ['$http', 'navigationService'];
         return UsersService;
     }());
     UMPApp.UsersService = UsersService;

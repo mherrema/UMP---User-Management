@@ -34,7 +34,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 
-<body ng-app="UMPApp" ng-controller="navigationController">
+<body ng-app="UMPApp" ng-controller="navigationController" ng-init="init()">
     <div class="container">
         <div class="row">
             <div class="title-row">
@@ -46,6 +46,7 @@
                     <a href="#/user" class="btn  top-button inga-btn inga-btn-positive ng-animate-disabled" ng-if="shouldShowButton">NEW USER</a>
                     <button class="btn  top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="clearFilters()" ng-if="filtersActive && !inUserEdit">Clear Filters</button>
                     <button class="btn top-button inga-btn inga-btn-positive ng-animate-disabled" ng-click="postUser()" ng-if="inUserEdit">Save User</button>
+                    <button class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-click="deleteUser()" ng-if="inUserEdit && !inUserNew">Delete User</button>
                     <a href="#/users" class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-if="inUserEdit">Cancel</a>
                 </div>
             </div>

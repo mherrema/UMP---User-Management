@@ -18,6 +18,14 @@ module UMPApp
     filtersActive: boolean;
     shouldShowButton: boolean;
     inUserEdit: boolean;
+    inUserNew: boolean;
+    myUserType: number;
+    godUser: boolean;
+    isdUser: boolean;
+    districtUser: boolean;
+    schoolUser: boolean;
+    schoolTeacherUser: boolean;
+    classroomUser: boolean;
   }
 
   export class NavigationController extends BaseController.Controller
@@ -32,7 +40,31 @@ module UMPApp
       var controller = this;
 
       $scope.init = function(){
-
+        console.log("init navcontroller");
+        navService.getMyUserType().then(function(d: number){
+          console.log(d);
+          $scope.myUserType = d;
+          $scope.godUser = false;
+          $scope.isdUser = false;
+          $scope.districtUser = false;
+          $scope.schoolUser = false;
+          $scope.schoolTeacherUser = false;
+          if(d == 0){
+            $scope.godUser = true;
+          }
+          else if(d == 4 || d == 7){
+            $scope.isdUser = true;
+          }
+          else if(d == 3 || d == 6){
+            $scope.districtUser = true;
+          }
+          else if(d == 2 || d == 5){
+            $scope.schoolUser = true;
+          }
+          else{
+            $scope.classroomUser = true;
+          }
+        });
       }
 
       $scope.$watch(() => navService.currentRoute,
@@ -48,6 +80,11 @@ module UMPApp
       $scope.$watch(() => navService.inUserEdit,
       (newValue: boolean, oldValue: boolean) => {
         $scope.inUserEdit = newValue;
+      });
+
+      $scope.$watch(() => navService.inUserNew,
+      (newValue: boolean, oldValue: boolean) => {
+        $scope.inUserNew = newValue;
       });
 
       $scope.$watch(() => usersService.filtersActive,

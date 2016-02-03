@@ -13,6 +13,31 @@ var UMPApp;
             _super.call(this, $scope);
             var controller = this;
             $scope.init = function () {
+                console.log("init navcontroller");
+                navService.getMyUserType().then(function (d) {
+                    console.log(d);
+                    $scope.myUserType = d;
+                    $scope.godUser = false;
+                    $scope.isdUser = false;
+                    $scope.districtUser = false;
+                    $scope.schoolUser = false;
+                    $scope.schoolTeacherUser = false;
+                    if (d == 0) {
+                        $scope.godUser = true;
+                    }
+                    else if (d == 4 || d == 7) {
+                        $scope.isdUser = true;
+                    }
+                    else if (d == 3 || d == 6) {
+                        $scope.districtUser = true;
+                    }
+                    else if (d == 2 || d == 5) {
+                        $scope.schoolUser = true;
+                    }
+                    else {
+                        $scope.classroomUser = true;
+                    }
+                });
             };
             $scope.$watch(function () { return navService.currentRoute; }, function (newValue, oldValue) {
                 $scope.currentRoute = newValue;
@@ -22,6 +47,9 @@ var UMPApp;
             });
             $scope.$watch(function () { return navService.inUserEdit; }, function (newValue, oldValue) {
                 $scope.inUserEdit = newValue;
+            });
+            $scope.$watch(function () { return navService.inUserNew; }, function (newValue, oldValue) {
+                $scope.inUserNew = newValue;
             });
             $scope.$watch(function () { return usersService.filtersActive; }, function (newValue, oldValue) {
                 $scope.filtersActive = newValue;

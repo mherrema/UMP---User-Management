@@ -32,7 +32,7 @@ module UMPApp
 
       $scope.init = function(){
         navService.setCurrentRoute({name: "Teacher Lookup"});
-        navService.updateUserFilter("", {id: 0, name: ""}, {id: 0, name: ""});
+        navService.updateUserFilter("", {id: 0, name: ""}, {IgorUserRoleKey: 0, Name: ""});
         $scope.districtArray = [
           {id: 0, name: 'Select District'},
           {id: 1, name: 'first'},
@@ -43,12 +43,12 @@ module UMPApp
         ];
         $scope.selectedDistrict= $scope.districtArray[0];
         $scope.schoolArray = [
-          {id: 0, name: 'Select School', districtId: 1},
-          {id: 1, name: 'first', districtId: 1},
-          {id: 2, name: 'second', districtId: 1},
-          {id: 3, name: 'third', districtId: 1},
-          {id: 4, name: 'fourth', districtId: 1},
-          {id: 5, name: 'fifth', districtId: 1},
+          // {id: 0, name: 'Select School', districtId: 1},
+          // {id: 1, name: 'first', districtId: 1},
+          // {id: 2, name: 'second', districtId: 1},
+          // {id: 3, name: 'third', districtId: 1},
+          // {id: 4, name: 'fourth', districtId: 1},
+          // {id: 5, name: 'fifth', districtId: 1},
         ];
         $scope.selectedSchool = $scope.schoolArray[0];
         this.searchInput = "";
@@ -97,7 +97,7 @@ module UMPApp
       });
 
       $scope.searchTeachers = function(){
-        teacherService.searchTeachers($scope.searchInput, $scope.selectedDistrict.id, $scope.selectedSchool.id);
+        // teacherService.searchTeachers($scope.searchInput, $scope.selectedDistrict.id, $scope.selectedSchool.id);
       }
 
       $scope.selectDistrict = function(item, model){
