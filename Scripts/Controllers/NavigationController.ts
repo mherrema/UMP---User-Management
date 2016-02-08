@@ -26,14 +26,20 @@ module UMPApp
     schoolUser: boolean;
     schoolTeacherUser: boolean;
     classroomUser: boolean;
+    deleteUser: Function;
+    modalErrorText: string;
+    clearErrorText: Function;
+    notificationSuccess: boolean;
+    notificationText: string;
+    notificationActive: boolean;
   }
 
   export class NavigationController extends BaseController.Controller
   {
     scope: INavigationScope;
-    static $inject = ['$scope', 'navigationService', 'usersService', 'teacherService'];
+    static $inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService'];
 
-    constructor( $scope: INavigationScope, navService: NavigationService, usersService: UsersService, teacherService: TeacherService)
+    constructor( $scope: INavigationScope, $routeParams: UMP.IRouteParams, $timeout: ng.ITimeoutService, navService: NavigationService, usersService: UsersService, teacherService: TeacherService)
     {
       super( $scope );
 
@@ -41,6 +47,7 @@ module UMPApp
 
       $scope.init = function(){
         console.log("init navcontroller");
+        $scope.notificationActive = false;
         navService.getMyUserType().then(function(d: number){
           console.log(d);
           $scope.myUserType = d;
@@ -117,6 +124,28 @@ module UMPApp
 
       $scope.postUser = function(){
         navService.postUser();
+        $scope.notificationActive = true;
+        $timeout(function() {
+        console.log('update with timeout fired');
+        $scope.notificationActive = false;
+    }, 3000);
+      }
+
+      $scope.deleteUser = function(){
+        usersService.deleteUser($routeParams.userKey).then(function(d: string){
+          console.log(d);
+          $scope.modalErrorText = "";
+          $scope.notificationSuccess = true;
+          $scope.notificationText = "Deleted User"
+        })
+        .catch(function(response) {
+          console.error('User Deletion Error', response.status, response.data);
+          $scope.modalErrorText = response.data;
+        });
+      }
+
+      $scope.clearErrorText = function(){
+        $scope.modalErrorText = "";
       }
     }
 

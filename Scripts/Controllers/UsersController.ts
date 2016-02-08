@@ -31,23 +31,23 @@ module UMPApp
 
       $scope.init = function(){
         navService.setCurrentRoute({name: "User Management"});
-        $scope.districtArray = [
-          {id: 0, name: 'Select District'},
-          {id: 1, name: 'first'},
-          {id: 2, name: 'second'},
-          {id: 3, name: 'third'},
-          {id: 4, name: 'fourth'},
-          {id: 5, name: 'fifth'},
-        ];
+        $scope.districtArray = [];
+        $scope.districtArray.push({DistrictKey: 0, DistrictName: 'Select District'});
         $scope.selectedDistrict= $scope.districtArray[0];
-        // $scope.userTypeArray = [
-        //   {IgorUserRoleKey: 0, Name: 'Select User Type'},
-        //   {id: 1, name: 'first'},
-        //   {id: 2, name: 'second'},
-        //   {id: 3, name: 'third'},
-        //   {id: 4, name: 'fourth'},
-        //   {id: 5, name: 'fifth'},
-        // ];
+        usersService.getAvailableDistricts().then(function(d: Array<District>){
+          $scope.districtArray = d;
+          $scope.districtArray.unshift({DistrictKey: 0, DistrictName: 'Select District'});
+        });
+        $scope.userTypeArray = [
+          {IgorUserRoleKey: 0, Name: 'Select User Type'},
+          {IgorUserRoleKey: 1, Name: 'Classroom User'},
+          {IgorUserRoleKey: 2, Name: 'School User'},
+          {IgorUserRoleKey: 3, Name: 'District User'},
+          {IgorUserRoleKey: 4, Name: 'ISD User'},
+          {IgorUserRoleKey: 5, Name: 'Aggregate School User'},
+          {IgorUserRoleKey: 6, Name: 'Aggregate District User'},
+          {IgorUserRoleKey: 7, Name: 'Aggregate ISD User'}
+        ];
         $scope.selectedUserType = {IgorUserRoleKey: 0, Name: 'Select User Type'};
         this.searchInput = "";
         $scope.users = [];
@@ -58,7 +58,7 @@ module UMPApp
         if(navService.currentUserFilter.searchInput != ""){
           $scope.searchInput = navService.currentUserFilter.searchInput;
         }
-        if(navService.currentUserFilter.district.id != 0){
+        if(navService.currentUserFilter.district.DistrictKey != 0){
           $scope.selectedDistrict = navService.currentUserFilter.district;
         }
         if(navService.currentUserFilter.userType.IgorUserRoleKey != 0){
@@ -75,9 +75,10 @@ module UMPApp
       (newValue: boolean, oldValue: boolean) => {
         if(newValue){
           $scope.searchInput = "";
-          $scope.selectedDistrict = {id: 0, name: "Select District"};
+          $scope.selectedDistrict = {DistrictKey: 0, DistrictName: "Select District"};
           $scope.selectedUserType = {IgorUserRoleKey: 0, Name: "Select User Type"};
           usersService.clearedFilters();
+          $scope.searchUsers();
         }
       });
 

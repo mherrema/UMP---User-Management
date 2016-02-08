@@ -86,7 +86,6 @@
                         </option>
                     </select>
                 </div>
-                {{ISD}}
                 <div class="form-group" ng-if="isdUser || districtUser || schoolUser || classroomUser">
                     <label class="control-label" for="isd-select" >
                         ISD
@@ -129,13 +128,13 @@
                 <div class="form-group" ng-if="classroomUser" ng-repeat="school in user.Schools">
 
                     <label class="control-label" for="school-teacher-select">
-                        {{school.SchoolName}} School Teachers
+                        {{school.SchoolName}} Teachers
                     </label>
                     <ui-select multiple ng-model="school.selectedTeachers" theme="select2">
                         <ui-select-match placeholder="Select teacher...">
                             {{$item.SchoolTeacherName}}
                         </ui-select-match>
-                        <ui-select-choices repeat="item in (school.SchoolTeachers | filter: $select.search) track by item.SchoolTeacherKey">
+                        <ui-select-choices repeat="item in (school.schoolTeachers | filter: $select.search) track by item.SchoolTeacherKey">
                             <span ng-bind="item.SchoolTeacherName"></span>
                         </ui-select-choices>
                     </ui-select>
@@ -206,9 +205,9 @@
         </form>
 
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <pre>
         {{user}}
         </pre>
-    </div>
+    </div> -->
 </div>

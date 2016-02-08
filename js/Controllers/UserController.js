@@ -30,8 +30,38 @@ var UMPApp;
                     });
                 }
                 else {
+                    $scope.user = {
+                        Email: "",
+                        Username: "",
+                        FirstName: "",
+                        LastName: "",
+                        Password: "",
+                        UserType: { IgorUserRoleKey: 0, Name: "" },
+                        IsLockedOut: false,
+                        SignedUserAgreement: false,
+                        AdditionalRoles: {
+                            InGAAssessmentCreator: false,
+                            InGAAssessmentScoreEntry: false,
+                            UMPUser: false,
+                            CohortBuilder: false,
+                            CohortPublisher: false,
+                        },
+                        Comments: "",
+                        Districts: [],
+                        ISD: { ISDKey: 0, ISDName: "" },
+                        Schools: [],
+                        Roles: [],
+                        Teachers: []
+                    };
                     navService.setCurrentRoute({ name: "Add User" });
                     $scope.inNewUser = true;
+                    usersService.getISDList().then(function (d) {
+                        console.log(d);
+                        $scope.isdArray = d;
+                        if ($scope.user != null) {
+                            $scope.ISD = $scope.user.ISD;
+                        }
+                    });
                 }
                 $scope.hidePasswordFields = true;
                 $scope.additionalRoles = {
@@ -86,18 +116,34 @@ var UMPApp;
                         //   }
                         // }
                     });
-                    for (var i = 0; i < $scope.user.Districts.length; i++) {
-                        $scope.districtArray.push($scope.user.Districts[i]);
-                    }
                 }
                 if ($scope.schoolArray.length == 0) {
-                    for (var i = 0; i < $scope.user.Schools.length; i++) {
-                        $scope.schoolArray.push($scope.user.Schools[i]);
+                    // for(var i = 0; i< $scope.user.Schools.length; i++){
+                    //   $scope.schoolArray.push($scope.user.Schools[i]);
+                    // }
+                    // $scope.ISD = String($scope.user.ISD.ISDKey);
+                    var districts = "";
+                    for (var i = 0; i < $scope.user.Districts.length; i++) {
+                        districts += $scope.user.Districts[i].DistrictKey;
+                        if (i < $scope.user.Districts.length - 1) {
+                            districts += ",";
+                        }
                     }
+                    console.log(districts);
+                    usersService.getSchoolList(districts).then(function (d) {
+                        console.log(d);
+                        $scope.schoolArray = d;
+                        // remove already selected
+                        // for(var i = 0; i< $scope.user.Districts.length; i++){
+                        //   if($scope.districtArray.indexOf($scope.user.Districts[i]) > -1){
+                        //     $scope.districtArray.splice($scope.districtArray.indexOf($scope.user.Districts[i]), 1);
+                        //   }
+                        // }
+                    });
                 }
                 if ($scope.user.Teachers.length > 0) {
-                    for (var i = 0; i < $scope.user.Teachers.length; i++) {
-                        for (var j = 0; j < $scope.user.Schools.length; j++) {
+                    for (var j = 0; j < $scope.user.Schools.length; j++) {
+                        for (var i = 0; i < $scope.user.Teachers.length; i++) {
                             if ($scope.user.Teachers[i].SchoolKey == $scope.user.Schools[j].SchoolKey) {
                                 if ($scope.user.Schools[j].schoolTeachers == undefined) {
                                     $scope.user.Schools[j].schoolTeachers = [];
@@ -109,6 +155,28 @@ var UMPApp;
                                 $scope.user.Schools[j].selectedTeachers.push($scope.user.Teachers[i]);
                             }
                         }
+                        usersService.getSchoolTeacherList(String($scope.user.Schools[j].SchoolKey)).then(function (d) {
+                            if (d.length > 0) {
+                                for (var k = 0; k < $scope.user.Schools.length; k++) {
+                                    if ($scope.user.Schools[k].SchoolKey == d[0].SchoolKey) {
+                                        $scope.user.Schools[k].schoolTeachers = d;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                else if ($scope.user.Schools.length > 0) {
+                    for (var j = 0; j < $scope.user.Schools.length; j++) {
+                        usersService.getSchoolTeacherList(String($scope.user.Schools[j].SchoolKey)).then(function (d) {
+                            if (d.length > 0) {
+                                for (var k = 0; k < $scope.user.Schools.length; k++) {
+                                    if ($scope.user.Schools[k].SchoolKey == d[0].SchoolKey) {
+                                        $scope.user.Schools[k].schoolTeachers = d;
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             };
@@ -165,7 +233,24 @@ var UMPApp;
             };
             $scope.selectDistrict = function (item, model) {
                 // $scope.user.schools = [];
-                $scope.schoolArray = [];
+                var districts = "";
+                for (var i = 0; i < $scope.user.Districts.length; i++) {
+                    districts += $scope.user.Districts[i].DistrictKey;
+                    if (i < $scope.user.Districts.length - 1) {
+                        districts += ",";
+                    }
+                }
+                console.log(districts);
+                usersService.getSchoolList(districts).then(function (d) {
+                    console.log(d);
+                    $scope.schoolArray = d;
+                    // remove already selected
+                    // for(var i = 0; i< $scope.user.Districts.length; i++){
+                    //   if($scope.districtArray.indexOf($scope.user.Districts[i]) > -1){
+                    //     $scope.districtArray.splice($scope.districtArray.indexOf($scope.user.Districts[i]), 1);
+                    //   }
+                    // }
+                });
                 /**********
                 *
                 *     Get all schools with selected districts, filter out already selected
@@ -174,24 +259,57 @@ var UMPApp;
             };
             $scope.removeDistrict = function (item, model) {
                 // var schoolsToRemove = [];
-                for (var i = 0; i < $scope.user.Schools.length; i++) {
+                for (var i = $scope.user.Schools.length - 1; i > -1; i--) {
                     if ($scope.user.Schools[i].DistrictKey == item.DistrictKey) {
                         // schoolsToRemove.push($scope.user.schools[i].id);
                         $scope.user.Schools.splice(i, 1);
                     }
                 }
-            };
-            $scope.selectSchool = function (item, model) {
-                // console.log(item);
-                // console.log($scope.user.schools);
-                for (var i = 0; i < $scope.user.Schools.length; i++) {
-                    if ($scope.user.Schools[i].SchoolName == item.name) {
-                        if (!$scope.user.Schools[i].schoolTeachers || $scope.user.Schools[i].schoolTeachers.length == 0) {
-                            //search for teachers at that school
-                            $scope.user.Schools[i].schoolTeachers = [];
-                        }
+                var districts = "";
+                for (var i = 0; i < $scope.user.Districts.length; i++) {
+                    districts += $scope.user.Districts[i].DistrictKey;
+                    if (i < $scope.user.Districts.length - 1) {
+                        districts += ",";
                     }
                 }
+                console.log(districts);
+                if (districts != "") {
+                    usersService.getSchoolList(districts).then(function (d) {
+                        console.log(d);
+                        $scope.schoolArray = d;
+                        // remove already selected
+                        // for(var i = 0; i< $scope.user.Districts.length; i++){
+                        //   if($scope.districtArray.indexOf($scope.user.Districts[i]) > -1){
+                        //     $scope.districtArray.splice($scope.districtArray.indexOf($scope.user.Districts[i]), 1);
+                        //   }
+                        // }
+                    });
+                }
+            };
+            $scope.selectSchool = function (item, model) {
+                console.log(item);
+                // console.log($scope.user.schools);
+                // for(var i = 0; i< $scope.user.Schools.length; i++){
+                //   if($scope.user.Schools[i].SchoolName == item.name){
+                //     if(!$scope.user.Schools[i].schoolTeachers || $scope.user.Schools[i].schoolTeachers.length == 0){
+                //       //search for teachers at that school
+                //       $scope.user.Schools[i].schoolTeachers = [
+                //         // {id: 1, name: 'firstTeacher', schoolId: 1},
+                //         // {id: 2, name: 'secondTeacher', schoolId: 1},
+                //         // {id: 3, name: 'thirdTeacher', schoolId: 1},
+                //         // {id: 4, name: 'fourthTeacher', schoolId: 1},
+                //         // {id: 5, name: 'fifthTeacher', schoolId: 1}
+                //       ];
+                //     }
+                //   }
+                // }
+                usersService.getSchoolTeacherList(item.SchoolKey).then(function (d) {
+                    for (var i = 0; i < $scope.user.Schools.length; i++) {
+                        if ($scope.user.Schools[i].SchoolKey == item.SchoolKey) {
+                            $scope.user.Schools[i].schoolTeachers = d;
+                        }
+                    }
+                });
             };
             $scope.checkValidity = function () {
                 var valid = true;
@@ -247,6 +365,11 @@ var UMPApp;
             $scope.postUser = function () {
                 console.log("here");
                 if ($scope.checkValidity()) {
+                    //post user
+                    for (var i = 0; i < $scope.user.Schools.length; i++) {
+                        $scope.user.Schools[i].schoolTeachers = [];
+                    }
+                    console.log($scope.user);
                 }
                 else {
                 }

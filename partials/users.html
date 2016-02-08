@@ -6,20 +6,20 @@
             <div class="col-sm-4">
               <ui-select ng-model="$parent.selectedDistrict" theme="select2" on-select="selectDistrict($item, $model)">
                 <ui-select-match>
-                  <span ng-bind="$select.selected.name"></span>
+                  <span ng-bind="$select.selected.DistrictName"></span>
                 </ui-select-match>
-                <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.id">
-                  <span ng-bind="item.name"></span>
+                <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.DistrictKey">
+                  <span ng-bind="item.DistrictName"></span>
                 </ui-select-choices>
               </ui-select>
             </div>
             <div class="col-sm-4">
               <ui-select ng-model="$parent.selectedUserType" theme="select2" on-select="selectUserType($item, $model)">
                 <ui-select-match>
-                  <span ng-bind="$select.selected.name"></span>
+                  <span ng-bind="$select.selected.Name"></span>
                 </ui-select-match>
-                <ui-select-choices repeat="item in (userTypeArray | filter: $select.search) track by item.id">
-                  <span ng-bind="item.name"></span>
+                <ui-select-choices repeat="item in (userTypeArray | filter: $select.search) track by item.IgorUserRoleKey">
+                  <span ng-bind="item.Name"></span>
                 </ui-select-choices>
               </ui-select>
             </div>

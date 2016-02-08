@@ -32,16 +32,16 @@ module UMPApp
 
       $scope.init = function(){
         navService.setCurrentRoute({name: "Teacher Lookup"});
-        navService.updateUserFilter("", {id: 0, name: ""}, {IgorUserRoleKey: 0, Name: ""});
-        $scope.districtArray = [
-          {id: 0, name: 'Select District'},
-          {id: 1, name: 'first'},
-          {id: 2, name: 'second'},
-          {id: 3, name: 'third'},
-          {id: 4, name: 'fourth'},
-          {id: 5, name: 'fifth'},
-        ];
-        $scope.selectedDistrict= $scope.districtArray[0];
+        // navService.updateUserFilter("", {id: 0, name: ""}, {IgorUserRoleKey: 0, Name: ""});
+        // $scope.districtArray = [
+        //   {id: 0, name: 'Select District'},
+        //   {id: 1, name: 'first'},
+        //   {id: 2, name: 'second'},
+        //   {id: 3, name: 'third'},
+        //   {id: 4, name: 'fourth'},
+        //   {id: 5, name: 'fifth'},
+        // ];
+        // $scope.selectedDistrict= $scope.districtArray[0];
         $scope.schoolArray = [
           // {id: 0, name: 'Select School', districtId: 1},
           // {id: 1, name: 'first', districtId: 1},

@@ -365,6 +365,14 @@ input[type=checkbox] {
 }
 
 .edit-user {
+  .select2-container-multi{
+    &.select2-container-active {
+      .select2-choices{
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
     .checkbox-inline-div {
         display: inline-block;
         .checkbox-inline {
@@ -482,5 +490,147 @@ input[type=checkbox] {
     .inputfile + label {
         cursor: pointer;
         /* "hand" cursor */
+    }
+}
+
+.modal {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    .modal-dialog {
+
+        .modal-content {
+            border-radius: 0px;
+
+            .modal-header {
+                width: auto;
+                overflow: hidden;
+                border-bottom: none;
+            }
+
+            .modal-body {
+                height: auto;
+            }
+
+            .ump-modal {
+
+                .modal-x {
+                    color: #ff6a6a;
+                    font-size: 16px;
+                    top: 0;
+                    cursor: pointer;
+                }
+
+                h2 {
+                    font-family: "AvenirNextLTPro-Regular", sans-serif;
+                    text-transform: none;
+                }
+
+                .modal-header {
+                    border: none;
+                    padding: 15px;
+                    width: 100%;
+                    border-bottom-width: 0;
+                    opacity: 1;
+                    background-color: #fff;
+
+                    .modal-title {
+                        padding-top: 50px;
+                        padding-left: 30px;
+                        color: #177a9b;
+                        font-size: 24px;
+                        font-family: "AvenirNextLTPro-Regular", sans-serif;
+                    }
+
+                }
+
+                .modal-body {
+                    padding: 0;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+
+                    .row {
+                        padding-left: 45px;
+                        padding-right: 45px;
+                        margin: 0;
+
+                        .error{
+                          color: #ff6a6a;
+                        }
+
+                        label {
+                            font-size: 10px;
+                            padding-left: 15px;
+                            text-transform: uppercase;
+                            color: #454545;
+                            font-family: "AvenirNextLTPro-Regular", sans-serif;
+                            font-weight: 500;
+
+                            &.no-left-pad {
+                                padding-left: 0;
+                            }
+                        }
+                    }
+
+                    .table-title-row {
+                        padding-top: 20px;
+                        padding-bottom: 5px;
+
+                        .modal-table-title {
+                            text-transform: uppercase;
+                            font-size: 13px;
+                            color: #0A7794;
+                        }
+                    }
+
+                    .right-btn {
+                        float: right;
+                        margin-left: 15px;
+                    }
+                }
+                //end modal-body
+                .modal-footer {
+                    border-top: none;
+                }
+            }
+        }
+    }
+
+    &.fade {
+        .modal-dialog {
+            -webkit-transform: translate(0, 0);
+            -ms-transform: translate(0, 0);
+            transform: translate(0, 0);
+            -webkit-transition: -webkit-transform 0.2s ease-out;
+            -moz-transition: -moz-transform 0.2s ease-out;
+            -o-transition: -o-transform 0.2s ease-out;
+            transition: transform 0.2s ease-out;
+        }
+    }
+
+    &.in {
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-backdrop.in {
+    opacity: .5;
+}
+
+.notification{
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    &.active{
+        opacity: 1;
     }
 }

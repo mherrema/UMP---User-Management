@@ -35,6 +35,7 @@ module UMPApp
     inUserNew: boolean;
     $http: ng.IHttpService;
     promise: ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>;
+    apiRoot: string;
 
     constructor($http: ng.IHttpService)
     {
@@ -43,8 +44,10 @@ module UMPApp
       this.shouldPostUser = false;
       this.inUserEdit = false;
       this.inUserNew = false;
-      this.currentUserFilter = {searchInput: "", district:{id: 0, name: ""},userType: {IgorUserRoleKey: 0, Name: ""}};
+      this.currentUserFilter = {searchInput: "", district:{DistrictKey: 0, DistrictName: ""},userType: {IgorUserRoleKey: 0, Name: ""}};
       this.$http = $http;
+      // this.apiRoot = "http://172.21.255.136";
+      this.apiRoot = "http://win-iq115hn5k0f";
     }
 
     setCurrentRoute(item: INavItem): void
@@ -83,7 +86,7 @@ module UMPApp
 
     getMyUserType(): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
     {
-      this.promise = this.$http.get('http://win-iq115hn5k0f:37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/UserType/')
+      this.promise = this.$http.get(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/UserType/')
       .then(function(response){
         // this.users = response;
         return response.data;
