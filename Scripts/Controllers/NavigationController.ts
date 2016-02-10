@@ -32,14 +32,17 @@ module UMPApp
     notificationSuccess: boolean;
     notificationText: string;
     notificationActive: boolean;
+    currentNotification: Notification;
   }
 
   export class NavigationController extends BaseController.Controller
   {
     scope: INavigationScope;
-    static $inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService'];
+    static $inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
 
-    constructor( $scope: INavigationScope, $routeParams: UMP.IRouteParams, $timeout: ng.ITimeoutService, navService: NavigationService, usersService: UsersService, teacherService: TeacherService)
+    constructor( $scope: INavigationScope, $routeParams: UMP.IRouteParams, $timeout: ng.ITimeoutService,
+      navService: NavigationService, usersService: UsersService, teacherService: TeacherService,
+    notificationService: NotificationService)
     {
       super( $scope );
 
@@ -124,11 +127,6 @@ module UMPApp
 
       $scope.postUser = function(){
         navService.postUser();
-        $scope.notificationActive = true;
-        $timeout(function() {
-        console.log('update with timeout fired');
-        $scope.notificationActive = false;
-    }, 3000);
       }
 
       $scope.deleteUser = function(){

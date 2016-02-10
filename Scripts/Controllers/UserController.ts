@@ -14,13 +14,18 @@ module UMPApp
     UserType: UserType;
     IsLockedOut: boolean;
     SignedUserAgreement: boolean;
-    AdditionalRoles: AdditionalRoles;
+    // AdditionalRoles: AdditionalRoles;
     Comments: string;
     Districts: Array<District>;
     ISD: ISD;
     Schools: Array<School>;
     Roles: Array<string>;
-    Teachers: Array<SchoolTeacher>
+    Teachers: Array<SchoolTeacher>;
+    InGAAssessmentCreator: boolean;
+    InGAAssessmentScoreEntry : boolean;
+    CohortBuilder : boolean;
+    CohortPublisher : boolean;
+    UmpUser : boolean;
   }
 
   export interface UserType
@@ -76,9 +81,9 @@ module UMPApp
   export class UserController extends BaseController.Controller
   {
     scope: IUserScope;
-    static $inject = ['$scope', '$routeParams', 'navigationService', 'usersService'];
+    static $inject = ['$scope', '$routeParams', 'navigationService', 'usersService', 'notificationService'];
 
-    constructor( $scope: IUserScope, $routeParams: UMP.IRouteParams, navService: NavigationService, usersService: UsersService)
+    constructor( $scope: IUserScope, $routeParams: UMP.IRouteParams, navService: NavigationService, usersService: UsersService, notificationService: NotificationService)
     {
       super( $scope );
 
@@ -111,19 +116,24 @@ module UMPApp
             UserType: {IgorUserRoleKey: 0, Name: ""},
             IsLockedOut: false,
             SignedUserAgreement: false,
-            AdditionalRoles: {
-              InGAAssessmentCreator: false,
-              InGAAssessmentScoreEntry: false,
-              UMPUser: false,
-              CohortBuilder: false,
-              CohortPublisher: false,
-            },
+            // AdditionalRoles: {
+            //   InGAAssessmentCreator: false,
+            //   InGAAssessmentScoreEntry: false,
+            //   UMPUser: false,
+            //   CohortBuilder: false,
+            //   CohortPublisher: false,
+            // },
             Comments: "",
             Districts: [],
             ISD: {ISDKey: 0, ISDName: ""},
             Schools: [],
             Roles: [],
-            Teachers: []
+            Teachers: [],
+            InGAAssessmentCreator: false,
+            InGAAssessmentScoreEntry : false,
+            CohortBuilder : false,
+            CohortPublisher : false,
+            UmpUser : false
           };
           navService.setCurrentRoute({name: "Add User"});
           $scope.inNewUser = true;
@@ -151,27 +161,26 @@ module UMPApp
       }
 
       $scope.setupUser = function(){
-        $scope.user.AdditionalRoles = {
-          InGAAssessmentCreator: false,
-          InGAAssessmentScoreEntry: false,
-          UMPUser: false,
-          CohortBuilder: false,
-          CohortPublisher: false
-        }
+        $scope.user.InGAAssessmentCreator = false;
+        $scope.user.InGAAssessmentScoreEntry = false;
+        $scope.user.UmpUser = false;
+        $scope.user.CohortBuilder = false;
+        $scope.user.CohortPublisher = false;
+
         if($scope.user.Roles.indexOf("UMP User Role") > -1){
-          $scope.user.AdditionalRoles.UMPUser = true;
+          $scope.user.UmpUser = true;
         }
         if($scope.user.Roles.indexOf("InGA Assessment Creator Role") > -1){
-          $scope.user.AdditionalRoles.InGAAssessmentCreator = true;
+          $scope.user.InGAAssessmentCreator = true;
         }
         if($scope.user.Roles.indexOf("InGA Assessment Score Entry Role") > -1){
-          $scope.user.AdditionalRoles.InGAAssessmentScoreEntry = true;
+          $scope.user.InGAAssessmentScoreEntry = true;
         }
         if($scope.user.Roles.indexOf("Cohort Builder Role") > -1){
-          $scope.user.AdditionalRoles.CohortBuilder = true;
+          $scope.user.CohortBuilder = true;
         }
         if($scope.user.Roles.indexOf("Cohort Publisher Role") > -1){
-          $scope.user.AdditionalRoles.CohortPublisher = true;
+          $scope.user.CohortPublisher = true;
         }
 
         $scope.userType = String($scope.user.UserType.IgorUserRoleKey);
@@ -463,7 +472,9 @@ module UMPApp
       }
 
       $scope.postUser = function(){
-        console.log("here")
+        console.log($scope.user);
+        usersService.postUser(angular.copy($scope.user));
+        // notificationService.showNotification("Success saving user", "success");
         if($scope.checkValidity()){
           //post user
 

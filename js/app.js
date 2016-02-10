@@ -41,6 +41,7 @@ var UMPApp;
     myApp.addService('navigationService', UMPApp.NavigationService);
     myApp.addService('usersService', UMPApp.UsersService);
     myApp.addService('teacherService', UMPApp.TeacherService);
+    myApp.addService('notificationService', UMPApp.NotificationService);
     myApp.addRoute("/user", "partials/user.html", "UMPUserController");
     myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
     myApp.addRoute("/users", "partials/users.html", "UMPUsersController");

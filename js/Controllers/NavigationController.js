@@ -9,7 +9,7 @@ var UMPApp;
 (function (UMPApp) {
     var NavigationController = (function (_super) {
         __extends(NavigationController, _super);
-        function NavigationController($scope, $routeParams, $timeout, navService, usersService, teacherService) {
+        function NavigationController($scope, $routeParams, $timeout, navService, usersService, teacherService, notificationService) {
             _super.call(this, $scope);
             var controller = this;
             $scope.init = function () {
@@ -76,11 +76,6 @@ var UMPApp;
             };
             $scope.postUser = function () {
                 navService.postUser();
-                $scope.notificationActive = true;
-                $timeout(function () {
-                    console.log('update with timeout fired');
-                    $scope.notificationActive = false;
-                }, 3000);
             };
             $scope.deleteUser = function () {
                 usersService.deleteUser($routeParams.userKey).then(function (d) {
@@ -98,7 +93,7 @@ var UMPApp;
                 $scope.modalErrorText = "";
             };
         }
-        NavigationController.$inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService'];
+        NavigationController.$inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
         return NavigationController;
     }(BaseController.Controller));
     UMPApp.NavigationController = NavigationController;

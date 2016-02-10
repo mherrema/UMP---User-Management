@@ -1,25 +1,25 @@
 <div ng-init="init()">
 <div class="row above-table-actions-row" style="padding-top: 0.5em; padding-bottom: 0.5em;">
     <div class="col-sm-4">
-        <input ng-model="searchInput" class="form-control" placeholder="Search by first or last name, or teacher ID" />
+        <input ng-model="searchInput" class="form-control" placeholder="Search by first or last name, or teacher key" />
     </div>
     <div class="col-sm-4">
       <ui-select ng-model="$parent.selectedDistrict" theme="select2" on-select="selectDistrict($item, $model)">
         <ui-select-match>
-          <span ng-bind="$select.selected.name"></span>
+          <span ng-bind="$select.selected.DistrictName"></span>
         </ui-select-match>
-        <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.id">
-          <span ng-bind="item.name"></span>
+        <ui-select-choices repeat="item in (districtArray | filter: $select.search) track by item.DistrictKey">
+          <span ng-bind="item.DistrictName"></span>
         </ui-select-choices>
       </ui-select>
     </div>
     <div class="col-sm-4">
-      <ui-select ng-model="$parent.selectedSchool" ng-disabled="selectedDistrict.name == 'Select District'" theme="select2" on-select="selectSchool($item, $model)">
+      <ui-select ng-model="$parent.selectedSchool" ng-disabled="selectedDistrict.DistrictName == 'Select District'" theme="select2" on-select="selectSchool($item, $model)">
         <ui-select-match>
-          <span ng-bind="$select.selected.name"></span>
+          <span ng-bind="$select.selected.SchoolName"></span>
         </ui-select-match>
-        <ui-select-choices repeat="item in (schoolArray | filter: $select.search) track by item.id">
-          <span ng-bind="item.name"></span>
+        <ui-select-choices repeat="item in (schoolArray | filter: $select.search) track by item.SchoolKey">
+          <span ng-bind="item.SchoolName"></span>
         </ui-select-choices>
       </ui-select>
     </div>
@@ -28,34 +28,32 @@
     <table class="inga-table" style="position:relative;">
         <tr>
             <th>
-                <div class="heading-title" ng-click="toggleHeading1()">District</div>
+                <div class="heading-title">District</div>
             </th>
             <th>
-                <div class="heading-title" ng-click="toggleHeading1()">School</div>
+                <div class="heading-title">School</div>
             </th>
             <th>
-                <div class="heading-title" ng-click="toggleHeading2()">First Name</div>
+                <div class="heading-title">First Name</div>
             </th>
             <th>
-                <div class="heading-title" ng-click="toggleHeading3()">Last Name</div>
+                <div class="heading-title">Last Name</div>
             </th>
             <th>
-                <div class="heading-title" ng-click="toggleHeading4()">TeacherID</div>
+                <div class="heading-title">Teacher Key</div>
             </th>
             <th>
-                <div class="heading-title" ng-click="toggleHeading4()">Schedule Count</div>
+                <div class="heading-title">Schedule Count</div>
             </th>
-            <th></th>
         </tr>
         <tr ng-if="teachers && teachers.length == 0"><td colspan="7">No Teachers</td></tr>
         <tr ng-repeat="teacher in teachers">
-          <td>{{teacher.district}}</td>
-          <td>{{teacher.school}}</td>
-          <td>{{teacher.firstName}}</td>
-          <td>{{teacher.lastName}}</td>
-          <td>{{teacher.teacherId}}</td>
-          <td>{{teacher.scheduleCount}}</td>
-          <td></td>
+          <td>{{teacher.DistrictName}}</td>
+          <td>{{teacher.SchoolName}}</td>
+          <td>{{teacher.FirstName}}</td>
+          <td>{{teacher.LastName}}</td>
+          <td>{{teacher.TeacherKey}}</td>
+          <td>{{teacher.ScheduleCount}}</td>
         </tr>
     </table>
 </div>

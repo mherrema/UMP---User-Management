@@ -34,7 +34,7 @@
                     <label class="control-label requiredField" for="newPassword">
                         Password
                     </label>
-                    <input ng-model="user.password" class="form-control" id="password" name="password" type="password" />
+                    <input ng-model="user.Password" class="form-control" id="password" name="password" type="password" />
                 </div>
 
                 <div class="form-group " ng-if="!inNewUser">
@@ -132,10 +132,10 @@
                     </label>
                     <ui-select multiple ng-model="school.selectedTeachers" theme="select2">
                         <ui-select-match placeholder="Select teacher...">
-                            {{$item.SchoolTeacherName}}
+                            {{$item.FirstName}} {{$item.LastName}}
                         </ui-select-match>
                         <ui-select-choices repeat="item in (school.schoolTeachers | filter: $select.search) track by item.SchoolTeacherKey">
-                            <span ng-bind="item.SchoolTeacherName"></span>
+                            <span ng-bind="item.FirstName + ' ' + item.LastName"></span>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -170,27 +170,27 @@
                     <div class=" ">
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="InGA Assessment Creator" ng-model="user.AdditionalRoles.InGAAssessmentCreator" /> InGA Assessment Creator
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Creator" ng-model="user.InGAAssessmentCreator" /> InGA Assessment Creator
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="InGA Assessment Score Entry" ng-model="user.AdditionalRoles.InGAAssessmentScoreEntry" /> InGA Assessment Score Entry
+                                <input name="checkbox1" type="checkbox" value="InGA Assessment Score Entry" ng-model="user.InGAAssessmentScoreEntry" /> InGA Assessment Score Entry
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="UMP User" ng-model="user.AdditionalRoles.UMPUser" /> UMP User
+                                <input name="checkbox1" type="checkbox" value="UMP User" ng-model="user.UmpUser" /> UMP User
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="checkbox1" type="checkbox" value="Cohort Builder" ng-model="user.AdditionalRoles.CohortBuilder" /> Cohort Builder
+                                <input name="checkbox1" type="checkbox" value="Cohort Builder" ng-model="user.CohortBuilder" /> Cohort Builder
                             </label>
                         </div>
                         <div class="checkbox">
                             <label class="checkbox">
-                                <input name="cohortPublisher" type="checkbox" ng-model="user.AdditionalRoles.CohortPublisher" /> Cohort Publisher
+                                <input name="cohortPublisher" type="checkbox" ng-model="user.CohortPublisher" /> Cohort Publisher
                             </label>
                         </div>
                     </div>

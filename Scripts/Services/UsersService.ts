@@ -40,7 +40,8 @@ module UMPApp
   export interface SchoolTeacher
   {
     SchoolTeacherKey: number,
-    SchoolTeacherName: string,
+    FirstName: string,
+    LastName: string,
     SchoolKey: number
   }
 `  //
@@ -58,21 +59,23 @@ module UMPApp
     navService: NavigationService;
     $http: ng.IHttpService;
     $q: ng.IQService;
+    notificationService: NotificationService;
     promise: ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>;
     apiRoot: string;
     userSearchCanceler : ng.IDeferred<ng.IHttpPromiseCallbackArg<{}>>;
 
-    static $inject = ['$http', '$q', 'navigationService'];
+    static $inject = ['$http', '$q', 'navigationService', 'notificationService'];
 
-    constructor($http: ng.IHttpService, $q: ng.IQService, navService: NavigationService)
+    constructor($http: ng.IHttpService, $q: ng.IQService, navService: NavigationService, notificationService: NotificationService)
     {
       this.users = new Array<IUser>();
       this.filtersActive = false;
       this.navService = navService;
       this.$http = $http;
       this.$q = $q;
-      // this.apiRoot = "http://172.21.255.136";
-      this.apiRoot = "http://win-iq115hn5k0f";
+      this.notificationService = notificationService;
+      this.apiRoot = "http://172.21.255.138";
+      // this.apiRoot = "http://win-iq115hn5k0f";
       this.userSearchCanceler = $q.defer();
     }
 
@@ -145,6 +148,18 @@ module UMPApp
       });
 
       return this.promise;
+    }
+
+    postUser(userToPost: User): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>{
+      console.log("hi!");
+      console.log(userToPost);
+      var promise = this.$http.post(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/', userToPost)
+      .then(function(response){
+        console.log(response);
+        return response.data;
+      });
+
+      return promise;
     }
 
     clearFilters() :void

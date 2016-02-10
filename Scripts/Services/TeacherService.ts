@@ -2,23 +2,43 @@ module UMPApp
 {
   export interface ITeacher
   {
-    name: string,
-    url: string,
+    TeacherKey: number;
+    SchoolTeacherKey: number;
+    FirstName: string;
+    LastName: string;
+    Email: string;
+    SchoolKey: number;
+    SchoolName: string;
+    DistrictKey: number;
+    DistrictName: string;
+    ScheduleCount: number;
   }
 
   export class TeacherService
   {
-    teachers: Array<ITeacher>;
     shouldClearFilters: boolean;
     filtersActive: boolean;
-    constructor()
+    apiRoot: string;
+    $http: ng.IHttpService;
+    $q: ng.IQService;
+    teacherSearchCanceler : ng.IDeferred<ng.IHttpPromiseCallbackArg<{}>>;
+
+    static $inject = ['$http', '$q'];
+
+    constructor($http: ng.IHttpService, $q: ng.IQService)
     {
-      this.teachers = new Array<ITeacher>();
+      this.$http = $http;
+      this.$q = $q;
       this.filtersActive = false;
+      this.apiRoot = "http://172.21.255.138";
+      // this.apiRoot = "http://win-iq115hn5k0f";
+      this.teacherSearchCanceler = $q.defer();
     }
 
-    searchTeachers(searchInput: string, districtKey: number, schoolKey: number): void
+    searchTeachers(searchInput: string, districtKey: number, schoolKey: number): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>
     {
+      this.teacherSearchCanceler.resolve();
+      this.teacherSearchCanceler = this.$q.defer();
       var apiRoute = "/users";
       var filterString = "?";
 
@@ -50,6 +70,14 @@ module UMPApp
 
       console.log(apiRoute + filterString);
 
+      var promise = this.$http.get(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Teachers/' + filterString,
+      {timeout : this.teacherSearchCanceler.promise})
+      .then(function(response){
+        this.users = response;
+        return response.data;
+      });
+
+      return promise;
     }
 
     clearFilters() :void

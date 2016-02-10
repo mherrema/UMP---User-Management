@@ -2,14 +2,15 @@ var UMPApp;
 (function (UMPApp) {
     "  //\n  // export interface UserType\n  // {\n  //   id: number,\n  //   name: string\n  // }";
     var UsersService = (function () {
-        function UsersService($http, $q, navService) {
+        function UsersService($http, $q, navService, notificationService) {
             this.users = new Array();
             this.filtersActive = false;
             this.navService = navService;
             this.$http = $http;
             this.$q = $q;
-            // this.apiRoot = "http://172.21.255.136";
-            this.apiRoot = "http://win-iq115hn5k0f";
+            this.notificationService = notificationService;
+            this.apiRoot = "http://172.21.255.138";
+            // this.apiRoot = "http://win-iq115hn5k0f";
             this.userSearchCanceler = $q.defer();
         }
         UsersService.prototype.searchUsers = function (searchInput, district, userType) {
@@ -67,6 +68,16 @@ var UMPApp;
             });
             return this.promise;
         };
+        UsersService.prototype.postUser = function (userToPost) {
+            console.log("hi!");
+            console.log(userToPost);
+            var promise = this.$http.post(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/', userToPost)
+                .then(function (response) {
+                console.log(response);
+                return response.data;
+            });
+            return promise;
+        };
         UsersService.prototype.clearFilters = function () {
             this.shouldClearFilters = true;
             this.navService.updateUserFilter("", { DistrictKey: 0, DistrictName: "" }, { IgorUserRoleKey: 0, Name: "" });
@@ -119,7 +130,7 @@ var UMPApp;
             });
             return promise;
         };
-        UsersService.$inject = ['$http', '$q', 'navigationService'];
+        UsersService.$inject = ['$http', '$q', 'navigationService', 'notificationService'];
         return UsersService;
     }());
     UMPApp.UsersService = UsersService;

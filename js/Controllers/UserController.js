@@ -9,7 +9,7 @@ var UMPApp;
 (function (UMPApp) {
     var UserController = (function (_super) {
         __extends(UserController, _super);
-        function UserController($scope, $routeParams, navService, usersService) {
+        function UserController($scope, $routeParams, navService, usersService, notificationService) {
             _super.call(this, $scope);
             var controller = this;
             $scope.init = function () {
@@ -39,19 +39,24 @@ var UMPApp;
                         UserType: { IgorUserRoleKey: 0, Name: "" },
                         IsLockedOut: false,
                         SignedUserAgreement: false,
-                        AdditionalRoles: {
-                            InGAAssessmentCreator: false,
-                            InGAAssessmentScoreEntry: false,
-                            UMPUser: false,
-                            CohortBuilder: false,
-                            CohortPublisher: false,
-                        },
+                        // AdditionalRoles: {
+                        //   InGAAssessmentCreator: false,
+                        //   InGAAssessmentScoreEntry: false,
+                        //   UMPUser: false,
+                        //   CohortBuilder: false,
+                        //   CohortPublisher: false,
+                        // },
                         Comments: "",
                         Districts: [],
                         ISD: { ISDKey: 0, ISDName: "" },
                         Schools: [],
                         Roles: [],
-                        Teachers: []
+                        Teachers: [],
+                        InGAAssessmentCreator: false,
+                        InGAAssessmentScoreEntry: false,
+                        CohortBuilder: false,
+                        CohortPublisher: false,
+                        UmpUser: false
                     };
                     navService.setCurrentRoute({ name: "Add User" });
                     $scope.inNewUser = true;
@@ -77,27 +82,25 @@ var UMPApp;
                 // $scope.user.districts = [];
             };
             $scope.setupUser = function () {
-                $scope.user.AdditionalRoles = {
-                    InGAAssessmentCreator: false,
-                    InGAAssessmentScoreEntry: false,
-                    UMPUser: false,
-                    CohortBuilder: false,
-                    CohortPublisher: false
-                };
+                $scope.user.InGAAssessmentCreator = false;
+                $scope.user.InGAAssessmentScoreEntry = false;
+                $scope.user.UmpUser = false;
+                $scope.user.CohortBuilder = false;
+                $scope.user.CohortPublisher = false;
                 if ($scope.user.Roles.indexOf("UMP User Role") > -1) {
-                    $scope.user.AdditionalRoles.UMPUser = true;
+                    $scope.user.UmpUser = true;
                 }
                 if ($scope.user.Roles.indexOf("InGA Assessment Creator Role") > -1) {
-                    $scope.user.AdditionalRoles.InGAAssessmentCreator = true;
+                    $scope.user.InGAAssessmentCreator = true;
                 }
                 if ($scope.user.Roles.indexOf("InGA Assessment Score Entry Role") > -1) {
-                    $scope.user.AdditionalRoles.InGAAssessmentScoreEntry = true;
+                    $scope.user.InGAAssessmentScoreEntry = true;
                 }
                 if ($scope.user.Roles.indexOf("Cohort Builder Role") > -1) {
-                    $scope.user.AdditionalRoles.CohortBuilder = true;
+                    $scope.user.CohortBuilder = true;
                 }
                 if ($scope.user.Roles.indexOf("Cohort Publisher Role") > -1) {
-                    $scope.user.AdditionalRoles.CohortPublisher = true;
+                    $scope.user.CohortPublisher = true;
                 }
                 $scope.userType = String($scope.user.UserType.IgorUserRoleKey);
                 $scope.selectUserType();
@@ -363,7 +366,9 @@ var UMPApp;
                 // }
             };
             $scope.postUser = function () {
-                console.log("here");
+                console.log($scope.user);
+                usersService.postUser(angular.copy($scope.user));
+                // notificationService.showNotification("Success saving user", "success");
                 if ($scope.checkValidity()) {
                     //post user
                     for (var i = 0; i < $scope.user.Schools.length; i++) {
@@ -386,7 +391,7 @@ var UMPApp;
                 // for(var i = 0; i< )
             };
         }
-        UserController.$inject = ['$scope', '$routeParams', 'navigationService', 'usersService'];
+        UserController.$inject = ['$scope', '$routeParams', 'navigationService', 'usersService', 'notificationService'];
         return UserController;
     }(BaseController.Controller));
     UMPApp.UserController = UserController;

@@ -57,6 +57,7 @@ module UMPApp
   myApp.addService('navigationService', NavigationService);
   myApp.addService('usersService', UsersService);
   myApp.addService('teacherService', TeacherService);
+  myApp.addService('notificationService', NotificationService);
   myApp.addRoute("/user", "partials/user.html", "UMPUserController");
   myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
   myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
