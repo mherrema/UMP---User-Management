@@ -36,8 +36,9 @@
 </head>
 
 <body ng-app="UMPApp" ng-controller="navigationController" ng-init="init()">
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
             <div class="title-row">
                 <div class="col-sm-12">
                     <h2 class="title page-title" style="display: inline-block;">{{currentRoute.name}}</h2>
@@ -51,6 +52,7 @@
                     <a href="#/users" class="btn top-button inga-btn inga-btn-negative ng-animate-disabled" ng-if="inUserEdit">Cancel</a>
                 </div>
             </div>
+                </div>
         </div>
         <div class="notification" style="position: absolute; right: 0; top: 0; margin: 1em; padding: 1em; background-color: #fff; box-shadow: 0px 0px 8px #bbb;" ng-class="{'active': currentNotification.active}">
             <h4 style="color: #81d235; margin: 0;"><i class="fa fa-check"></i> {{currentNotification.notificationText}}</h4></div>

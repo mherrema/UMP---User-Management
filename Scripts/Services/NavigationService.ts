@@ -46,7 +46,7 @@ module UMPApp
       this.inUserNew = false;
       this.currentUserFilter = {searchInput: "", district:{DistrictKey: 0, DistrictName: ""},userType: {IgorUserRoleKey: 0, Name: ""}};
       this.$http = $http;
-      this.apiRoot = "http://172.21.255.138";
+      this.apiRoot = "http://172.21.255.136";
       // this.apiRoot = "http://win-iq115hn5k0f";
     }
 

@@ -26,6 +26,8 @@ module UMPApp
     CohortBuilder : boolean;
     CohortPublisher : boolean;
     UmpUser : boolean;
+    UserKey: number;
+    OldUsername?: string;
   }
 
   export interface UserType
@@ -133,7 +135,8 @@ module UMPApp
             InGAAssessmentScoreEntry : false,
             CohortBuilder : false,
             CohortPublisher : false,
-            UmpUser : false
+            UmpUser : false,
+            UserKey : 0
           };
           navService.setCurrentRoute({name: "Add User"});
           $scope.inNewUser = true;
@@ -272,6 +275,8 @@ module UMPApp
             });
           }
         }
+
+        $scope.user.OldUsername = $scope.user.Username;
 
       }
 

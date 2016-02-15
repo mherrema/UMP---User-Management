@@ -16,7 +16,7 @@
                     <label class="control-label requiredField" for="name">
                         Username
                     </label>
-                    <input ng-model="user.Username" class="form-control" id="username" name="username" type="text" />
+                    <input ng-model="user.Username" class="form-control" id="username" name="username" ng-disabled="!user.IsUsernameEditable" type="text" />
                 </div>
                 <div class="form-group ">
                     <label class="control-label requiredField" for="name">

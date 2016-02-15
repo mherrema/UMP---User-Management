@@ -74,7 +74,7 @@ module UMPApp
       this.$http = $http;
       this.$q = $q;
       this.notificationService = notificationService;
-      this.apiRoot = "http://172.21.255.138";
+      this.apiRoot = "http://172.21.255.136";
       // this.apiRoot = "http://win-iq115hn5k0f";
       this.userSearchCanceler = $q.defer();
     }
@@ -153,11 +153,20 @@ module UMPApp
     postUser(userToPost: User): ng.IPromise<ng.IHttpPromiseCallbackArg<{}>>{
       console.log("hi!");
       console.log(userToPost);
+      if(userToPost.UserKey != undefined && userToPost.UserKey != 0){
+      var promise = this.$http.put(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/', userToPost)
+      .then(function(response){
+        console.log(response);
+        return response.data;
+      });
+    }
+    else{
       var promise = this.$http.post(this.apiRoot + ':37913/_vti_bin/UMPApplicationService/UMPApplicationService.svc/Users/', userToPost)
       .then(function(response){
         console.log(response);
         return response.data;
       });
+    }
 
       return promise;
     }

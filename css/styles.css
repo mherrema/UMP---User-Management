@@ -48,19 +48,44 @@ h5 {
   margin-bottom: 20px;
   min-width: 210px;
 }
-.inga-table.row-link tr:hover td {
+.ump-table.row-link tr:hover td {
   transition: background 0.1s ease;
   background: #e4f5f9;
 }
-.inga-table.row-link tr:hover > td:first-child {
+.ump-table.row-link tr:hover > td:first-child {
   transition: background 0.1s ease;
   background: #d9f1f7;
 }
-.inga-table {
+.ump-table.bulk-upload-table {
+  border-top: #e5e5e5 1px solid;
+}
+.ump-table.bulk-upload-table tr.error-row {
+  border-top: #ff6a6a 2px solid;
+  border-bottom: #ff6a6a 2px solid;
+}
+.ump-table.bulk-upload-table tr.error-row td {
+  border-top: none;
+  border-bottom: none;
+  background: #F8EEEE;
+}
+.ump-table.bulk-upload-table tr.error-row > :first-child {
+  background: #F9E2E2;
+}
+.ump-table.bulk-upload-table tr th {
+  font-size: 10px;
+  font-weight: 600;
+}
+.ump-table.bulk-upload-table tr td {
+  font-size: 12px;
+}
+.ump-table.bulk-upload-table .error {
+  color: #F34F4F;
+}
+.ump-table {
   width: 100%;
   border-bottom: #e5e5e5 1px solid;
 }
-.inga-table tr th {
+.ump-table tr th {
   padding-top: 25px;
   padding-bottom: 15px;
   text-transform: uppercase;
@@ -71,37 +96,37 @@ h5 {
   font-size: 12px;
   font-weight: 500;
 }
-.inga-table tr td {
+.ump-table tr td {
   padding: 12px 20px;
   border: #e5e5e5 1px solid;
   background: #fcfcfc;
 }
-.inga-table tr > :first-child {
+.ump-table tr > :first-child {
   background: #eff7f9;
   border-left: none;
   padding-left: 65px;
 }
-.inga-table tr.inEdit > :first-child {
+.ump-table tr.inEdit > :first-child {
   padding-left: 25px;
 }
-.inga-table tr.inEdit > :first-child .glyphicon {
+.ump-table tr.inEdit > :first-child .glyphicon {
   padding-right: 23px;
   top: 2px;
   cursor: pointer;
 }
-.inga-table tr.inEdit > :first-child .glyphicon-remove {
+.ump-table tr.inEdit > :first-child .glyphicon-remove {
   color: #ff6a6a;
 }
-.inga-table tr.inEdit > :first-child .glyphicon-plus {
+.ump-table tr.inEdit > :first-child .glyphicon-plus {
   color: #1fbdd5;
 }
-.inga-table tr > :first-child td {
+.ump-table tr > :first-child td {
   padding-left: 30px;
 }
-.inga-table tr > :last-child {
+.ump-table tr > :last-child {
   border-right: none;
 }
-.inga-table.card-headings th {
+.ump-table.card-headings th {
   background-color: #fff;
 }
 .table-heading-dropdown {

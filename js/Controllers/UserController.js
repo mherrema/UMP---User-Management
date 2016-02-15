@@ -56,7 +56,8 @@ var UMPApp;
                         InGAAssessmentScoreEntry: false,
                         CohortBuilder: false,
                         CohortPublisher: false,
-                        UmpUser: false
+                        UmpUser: false,
+                        UserKey: 0
                     };
                     navService.setCurrentRoute({ name: "Add User" });
                     $scope.inNewUser = true;
@@ -182,6 +183,7 @@ var UMPApp;
                         });
                     }
                 }
+                $scope.user.OldUsername = $scope.user.Username;
             };
             $scope.$watch(function () { return navService.shouldPostUser; }, function (newValue, oldValue) {
                 if (newValue) {

@@ -9,7 +9,7 @@ var UMPApp;
 (function (UMPApp) {
     var NavigationController = (function (_super) {
         __extends(NavigationController, _super);
-        function NavigationController($scope, $routeParams, $timeout, navService, usersService, teacherService, notificationService) {
+        function NavigationController($scope, $routeParams, $timeout, $location, navService, usersService, teacherService, notificationService) {
             _super.call(this, $scope);
             var controller = this;
             $scope.init = function () {
@@ -83,6 +83,8 @@ var UMPApp;
                     $scope.modalErrorText = "";
                     $scope.notificationSuccess = true;
                     $scope.notificationText = "Deleted User";
+                    $location.path("/users");
+                    $('#deleteUserModal').modal('hide');
                 })
                     .catch(function (response) {
                     console.error('User Deletion Error', response.status, response.data);
@@ -93,7 +95,7 @@ var UMPApp;
                 $scope.modalErrorText = "";
             };
         }
-        NavigationController.$inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
+        NavigationController.$inject = ['$scope', '$routeParams', '$timeout', '$location', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
         return NavigationController;
     }(BaseController.Controller));
     UMPApp.NavigationController = NavigationController;

@@ -1,6 +1,10 @@
 ///<reference path="../../typings/angularjs/angular.d.ts"/>
 ///<reference path="../../typings/angularjs/angular-route.d.ts"/>
 
+interface JQuery {
+    modal(command: string): JQuery;
+}
+
 module UMPApp
 {
 
@@ -38,10 +42,10 @@ module UMPApp
   export class NavigationController extends BaseController.Controller
   {
     scope: INavigationScope;
-    static $inject = ['$scope', '$routeParams', '$timeout', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
+    static $inject = ['$scope', '$routeParams', '$timeout', '$location', 'navigationService', 'usersService', 'teacherService', 'notificationService'];
 
     constructor( $scope: INavigationScope, $routeParams: UMP.IRouteParams, $timeout: ng.ITimeoutService,
-      navService: NavigationService, usersService: UsersService, teacherService: TeacherService,
+      $location: ng.ILocationService, navService: NavigationService, usersService: UsersService, teacherService: TeacherService,
     notificationService: NotificationService)
     {
       super( $scope );
@@ -134,7 +138,9 @@ module UMPApp
           console.log(d);
           $scope.modalErrorText = "";
           $scope.notificationSuccess = true;
-          $scope.notificationText = "Deleted User"
+          $scope.notificationText = "Deleted User";
+          $location.path("/users");
+          $('#deleteUserModal').modal('hide');
         })
         .catch(function(response) {
           console.error('User Deletion Error', response.status, response.data);

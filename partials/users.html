@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="inga-table row-link" style="position:relative;">
+            <table class="ump-table row-link" style="position:relative;">
                 <tr>
                     <th>
                         <div class="search-box"><span class="search-box-title">Name</span></div>
@@ -52,7 +52,7 @@
                   <td>{{user.FirstName}} {{user.LastName}}</td>
                   <td>{{user.Username}}</td>
                   <td>{{user.Email}}</td>
-                  <td>{{user.LastActivityDate | date:'medium'}}</td>
+                  <td>{{user.LastLoginDate | date:'medium'}}</td>
                   <td>{{user.IsLockedOut}}</td>
                   <td>
                     <span ng-if="user.Roles.length > 3">{{user.Roles.length}} Roles</span>

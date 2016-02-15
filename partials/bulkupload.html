@@ -1,12 +1,14 @@
 <div ng-init="init()">
         <hr style="margin-top: 0;">
-        <div class="row bulk-upload">
+        <div class="row bulk-upload" ng-hide="userArray && userArray.length > 0">
+          <div class="col-xs-10 col-xs-offset-1">
             <div class="col-sm-6">
                 <h2>Select a file to bulk upload</h2>
                 <h4>This process does everything except actually load the users right now.</h4>
-                <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" onchange="angular.element(this).scope().setFiles(this)" />
+                <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected"
+                onchange="angular.element(this).scope().setFiles(this)" accept=".csv" />
                 <label for="file"><span>Choose a file&hellip;</span></label>
-                <button class="btn inga-btn inga-btn-negative" style="display: block;" ng-disabled="!file">Upload</button>
+                <button class="btn inga-btn inga-btn-negative" style="display: block;" ng-disabled="!file" ng-click="startUpload()">Start</button>
             </div>
             <div class="col-sm-6">
                 <h2>Upload Examples</h2>
@@ -24,7 +26,77 @@
                     <li>Signed User Agreement (yes or no)</li>
                 </ul>
             </div>
+          </div>
         </div>
+        <div class="row" ng-if="userArray && userArray.length > 0 && !uploaded" style="padding-bottom: 20px;">
+          <button class="btn inga-btn inga-btn-positive" style="display: block; text-align: center; margin: 0 auto; padding: 10px; padding-left: 30px; padding-right: 30px; font-size: 18px;"
+          ng-click="uploadUsers()" ng-disabled="errors">Upload</button>
+        </div>
+        <div class="row" ng-if="userArray && userArray.length > 0 && !uploaded" style="padding-bottom: 40px;">
+          <table class="ump-table bulk-upload-table" style="position:relative;">
+            <tr>
+              <th>
+                <div class="heading-title">Name</div>
+              </th>
+              <th>
+                <div class="heading-title">Email</div>
+              </th>
+              <th>
+                <div class="heading-title">Signed User Agreement</div>
+              </th>
+              <th>
+                <div class="heading-title">User Type</div>
+              </th>
+              <th>
+                <div class="heading-title">ISD</div>
+              </th>
+              <th>
+                <div class="heading-title">District</div>
+              </th>
+              <th>
+                <div class="heading-title">School(s)</div>
+              </th>
+              <th>
+                <div class="heading-title">Teacher(s)</div>
+              </th>
+              <th>
+                <div class="heading-title">InGA Score Entry</div>
+              </th>
+              <th>
+                <div class="heading-title">InGA Assessment Creator</div>
+              </th>
+            </tr>
+                <!-- <tr ng-if="teachers && teachers.length == 0"><td colspan="7">No Teachers</td></tr> -->
+                <tr ng-repeat="user in userArray" ng-class="{'error-row' : !user.IsRowValid}">
+                  <td><div style="white-space: nowrap;">
+                    <i class="fa fa-exclamation-triangle fa-2x error" style="display: inline-block; vertical-align: middle; padding-right: 10px; cursor:pointer;"
+                    ng-if="!user.IsRowValid" uib-tooltip-html="user.ErrorMessages" tooltip-placement="right"></i>
+                    <span style="display: inline vertical-align: middle;">{{user.LastName}}, {{user.FirstName}}</span></div></td>
+                  <td>{{user.Email}}</td>
+                  <td>{{user.UserAgreement}}</td>
+                  <td>{{user.UserType}}</td>
+                  <td>
+                    <!-- <span ng-if="!user.ISDName">{{user.ISDKey}}</span> -->
+                    <span ng-if="user.ISDName">{{user.ISDName}}</span>
+                  </td>
+                  <td>
+                    <!-- <span ng-if="!user.DistrictName">{{user.DistrictCode}}</span> -->
+                  <span ng-if="user.DistrictName">{{user.DistrictName}}</span>
+                </td>
+                  <td><span ng-repeat="school in user.Schools">{{school.SchoolName}}{{$last ? '' : ', '}}</span></td>
+                  <td><span ng-repeat="teacher in user.SchoolTeachers">{{teacher.FirstName}} {{teacher.LastName}} ({{teacher.SchoolCode}}-{{teacher.TeacherNumber}}){{$last ? '' : ', '}}</span></td>
+                  <td>{{user.InGAScoreEntry}}</td>
+                  <td>{{user.InGAAssessmentCreator}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row" ng-if="uploaded">
+        <div class="col-xs-10 col-xs-offset-1">
+                <h2> Uploaded {{userArray.length}} user(s)</h2>
+            <button class="btn inga-btn inga-btn-positive">Download Logins PDF</button>
+            <button class="btn inga-btn inga-btn-positive">Download Logins CSV</button>
+            </div>
+    </div>
     <script type="text/javascript">
         var inputs = document.querySelectorAll('.inputfile');
         Array.prototype.forEach.call(inputs, function (input) {
