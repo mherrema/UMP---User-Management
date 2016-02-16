@@ -397,7 +397,7 @@ var UMPApp;
                     }
                     console.log($scope.user);
                     usersService.postUser(angular.copy($scope.user)).then(function (d) {
-                        $location.path("/users");
+                        $location.path("/UMP/users");
                         // show notification
                     })
                         .catch(function (d) {

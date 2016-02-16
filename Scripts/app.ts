@@ -11,7 +11,7 @@ module UMP
     {
       this.app = angular.module( name, modules );
       this.app.config(function($routeProvider){
-        $routeProvider.otherwise({redirectTo:'/users'});
+        $routeProvider.otherwise({redirectTo:'/UMP/users'});
       })
     }
 
@@ -45,28 +45,56 @@ module UMP
     userKey:string;
  }
 }
+declare var igorApp: any;
 
 module UMPApp
 {
-  var myApp = new UMP.Module( 'UMPApp', ['ngRoute', 'ui.select', 'ngSanitize', 'ngAnimate', 'ui.bootstrap'] );
-  myApp.addController( 'navigationController', NavigationController );
-  myApp.addController( 'UMPUsersController', UsersController );
-  myApp.addController( 'UMPUserController', UserController );
-  myApp.addController( 'UMPTeacherController', TeacherController );
-  myApp.addController( 'UMPBulkUploadController', BulkUploadController );
-  myApp.addService('navigationService', NavigationService);
-  myApp.addService('usersService', UsersService);
-  myApp.addService('teacherService', TeacherService);
-  myApp.addService('notificationService', NotificationService);
-  myApp.addRoute("/user", "partials/user.html", "UMPUserController");
-  myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
-  myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
-  myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
-  myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
-  myApp.app.config(function($animateProvider) {
+
+  if(typeof igorApp !== 'undefined'){
+    console.log(typeof igorApp);
+    igorApp.requires.push('ngSanitize', 'angular-loading-bar', 'ngAnimate', 'ui.select');
+    igorApp.prototype.addController = function (name, controller) {
+        this.app.controller(name, controller);
+    };
+    igorApp.prototype.addService = function (name, service) {
+        this.app.service(name, service);
+    };
+    igorApp.prototype.addFactory = function (name, factory) {
+        this.app.factory(name, factory);
+    };
+    igorApp.prototype.addRoute = function (url, htmlPath, controller) {
+        this.app.config(function ($routeProvider, $animateProvider) {
+            $routeProvider.when(url, {
+                templateUrl: htmlPath,
+                controller: controller
+            });
+        });
+    };
+    // igorApp.app.config(function($routeProvider){
+    //   $routeProvider.otherwise({redirectTo:'/users'});
+    // })
+  }
+  else{
+    igorApp = new UMP.Module( 'UMPApp', ['ngRoute', 'ui.select', 'ngSanitize', 'ngAnimate', 'ui.bootstrap'] );
+  }
+  igorApp.addController( 'navigationController', NavigationController );
+  igorApp.addController( 'UMPUsersController', UsersController );
+  igorApp.addController( 'UMPUserController', UserController );
+  igorApp.addController( 'UMPTeacherController', TeacherController );
+  igorApp.addController( 'UMPBulkUploadController', BulkUploadController );
+  igorApp.addService('navigationService', NavigationService);
+  igorApp.addService('usersService', UsersService);
+  igorApp.addService('teacherService', TeacherService);
+  igorApp.addService('notificationService', NotificationService);
+  igorApp.addRoute("/UMP/user", "partials/user.html", "UMPUserController");
+  igorApp.addRoute("/UMP/user/:userKey", "partials/user.html", "UMPUserController");
+  igorApp.addRoute("/UMP/users", "partials/users.html", "UMPUsersController");
+  igorApp.addRoute("/UMP/teachers", "partials/teachers.html", "UMPTeacherController");
+  igorApp.addRoute("/UMP/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
+  igorApp.app.config(function($animateProvider) {
     $animateProvider.classNameFilter(/^(?:(?!ng-animate-disabled).)*$/);
   });
-  myApp.app.directive('rowLink', ['$location', function ($location) {
+  igorApp.app.directive('rowLink', ['$location', function ($location) {
     return{
       restrict: 'A',
       link: function (scope, element, attr) {

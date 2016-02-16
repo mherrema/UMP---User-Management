@@ -83,7 +83,7 @@ var UMPApp;
                     $scope.modalErrorText = "";
                     $scope.notificationSuccess = true;
                     $scope.notificationText = "Deleted User";
-                    $location.path("/users");
+                    $location.path("/UMP/users");
                     $('#deleteUserModal').modal('hide');
                 })
                     .catch(function (response) {

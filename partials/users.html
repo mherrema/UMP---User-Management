@@ -48,7 +48,7 @@
 <!--                    <th></th>-->
                 </tr>
                 <tr ng-if="users && users.length == 0"><td colspan="7">No Users</td></tr>
-                <tr ng-repeat="user in users" row-link="/user/{{user.UserKey}}">
+                <tr ng-repeat="user in users" row-link="/UMP/user/{{user.UserKey}}">
                   <td>{{user.FirstName}} {{user.LastName}}</td>
                   <td>{{user.Username}}</td>
                   <td>{{user.Email}}</td>

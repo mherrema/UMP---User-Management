@@ -6,7 +6,7 @@ var UMP;
         function Module(name, modules) {
             this.app = angular.module(name, modules);
             this.app.config(function ($routeProvider) {
-                $routeProvider.otherwise({ redirectTo: '/users' });
+                $routeProvider.otherwise({ redirectTo: '/UMP/users' });
             });
         }
         Module.prototype.addController = function (name, controller) {
@@ -32,25 +32,48 @@ var UMP;
 })(UMP || (UMP = {}));
 var UMPApp;
 (function (UMPApp) {
-    var myApp = new UMP.Module('UMPApp', ['ngRoute', 'ui.select', 'ngSanitize', 'ngAnimate', 'ui.bootstrap']);
-    myApp.addController('navigationController', UMPApp.NavigationController);
-    myApp.addController('UMPUsersController', UMPApp.UsersController);
-    myApp.addController('UMPUserController', UMPApp.UserController);
-    myApp.addController('UMPTeacherController', UMPApp.TeacherController);
-    myApp.addController('UMPBulkUploadController', UMPApp.BulkUploadController);
-    myApp.addService('navigationService', UMPApp.NavigationService);
-    myApp.addService('usersService', UMPApp.UsersService);
-    myApp.addService('teacherService', UMPApp.TeacherService);
-    myApp.addService('notificationService', UMPApp.NotificationService);
-    myApp.addRoute("/user", "partials/user.html", "UMPUserController");
-    myApp.addRoute("/user/:userKey", "partials/user.html", "UMPUserController");
-    myApp.addRoute("/users", "partials/users.html", "UMPUsersController");
-    myApp.addRoute("/teachers", "partials/teachers.html", "UMPTeacherController");
-    myApp.addRoute("/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
-    myApp.app.config(function ($animateProvider) {
+    if (typeof igorApp !== 'undefined') {
+        console.log(typeof igorApp);
+        igorApp.requires.push('ngSanitize', 'angular-loading-bar', 'ngAnimate', 'ui.select');
+        igorApp.prototype.addController = function (name, controller) {
+            this.app.controller(name, controller);
+        };
+        igorApp.prototype.addService = function (name, service) {
+            this.app.service(name, service);
+        };
+        igorApp.prototype.addFactory = function (name, factory) {
+            this.app.factory(name, factory);
+        };
+        igorApp.prototype.addRoute = function (url, htmlPath, controller) {
+            this.app.config(function ($routeProvider, $animateProvider) {
+                $routeProvider.when(url, {
+                    templateUrl: htmlPath,
+                    controller: controller
+                });
+            });
+        };
+    }
+    else {
+        igorApp = new UMP.Module('UMPApp', ['ngRoute', 'ui.select', 'ngSanitize', 'ngAnimate', 'ui.bootstrap']);
+    }
+    igorApp.addController('navigationController', UMPApp.NavigationController);
+    igorApp.addController('UMPUsersController', UMPApp.UsersController);
+    igorApp.addController('UMPUserController', UMPApp.UserController);
+    igorApp.addController('UMPTeacherController', UMPApp.TeacherController);
+    igorApp.addController('UMPBulkUploadController', UMPApp.BulkUploadController);
+    igorApp.addService('navigationService', UMPApp.NavigationService);
+    igorApp.addService('usersService', UMPApp.UsersService);
+    igorApp.addService('teacherService', UMPApp.TeacherService);
+    igorApp.addService('notificationService', UMPApp.NotificationService);
+    igorApp.addRoute("/UMP/user", "partials/user.html", "UMPUserController");
+    igorApp.addRoute("/UMP/user/:userKey", "partials/user.html", "UMPUserController");
+    igorApp.addRoute("/UMP/users", "partials/users.html", "UMPUsersController");
+    igorApp.addRoute("/UMP/teachers", "partials/teachers.html", "UMPTeacherController");
+    igorApp.addRoute("/UMP/bulkupload", "partials/bulkupload.html", "UMPBulkUploadController");
+    igorApp.app.config(function ($animateProvider) {
         $animateProvider.classNameFilter(/^(?:(?!ng-animate-disabled).)*$/);
     });
-    myApp.app.directive('rowLink', ['$location', function ($location) {
+    igorApp.app.directive('rowLink', ['$location', function ($location) {
             return {
                 restrict: 'A',
                 link: function (scope, element, attr) {
