@@ -70,8 +70,8 @@ module UMPApp
       $scope.init = function(){
         navService.setCurrentRoute({name: "Bulk Upload"});
         // navService.updateUserFilter("", {id: 0, name: ""}, {id: 0, name: ""});
-        this.apiRoot = "http://172.21.255.136";
-        // $scope.apiRoot = "http://win-iq115hn5k0f";
+        // this.apiRoot = "http://172.21.255.136";
+        $scope.apiRoot = "http://win-iq115hn5k0f";
       }
 
       $scope.setFiles = function(element) {

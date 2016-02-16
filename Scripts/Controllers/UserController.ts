@@ -33,7 +33,7 @@ module UMPApp
   export interface UserType
   {
     IgorUserRoleKey: number;
-    Name: string;
+    Name?: string;
   }
 
   export interface AdditionalRoles{
@@ -78,14 +78,16 @@ module UMPApp
     errorMessage: string;
     selectSchoolTeacher: Function;
     setupUser: Function;
+    newPassword: string;
+    confirmPassword: string;
   }
 
   export class UserController extends BaseController.Controller
   {
     scope: IUserScope;
-    static $inject = ['$scope', '$routeParams', 'navigationService', 'usersService', 'notificationService'];
+    static $inject = ['$scope', '$routeParams', '$location', 'navigationService', 'usersService', 'notificationService'];
 
-    constructor( $scope: IUserScope, $routeParams: UMP.IRouteParams, navService: NavigationService, usersService: UsersService, notificationService: NotificationService)
+    constructor( $scope: IUserScope, $routeParams: UMP.IRouteParams, $location: ng.ILocationService, navService: NavigationService, usersService: UsersService, notificationService: NotificationService)
     {
       super( $scope );
 
@@ -296,14 +298,17 @@ module UMPApp
       $scope.selectUserType = function(){
         // console.log($scope.user.userType);
         var userType = $scope.userType;
+        $scope.user.UserType = {IgorUserRoleKey: +userType}
         $scope.resetSelectedOptions();
         if(userType == "4" || userType == "7"){
           $scope.isdUser = true;
           $scope.districts = [];
-          $scope.schools = [];
+          $scope.user.Districts = [];
+          $scope.user.Schools = [];
         }
         if(userType == "3" || userType == "6"){
           $scope.districtUser = true;
+          $scope.user.Schools = [];
           $scope.schools = [];
         }
         if(userType == "2" || userType == "5"){
@@ -448,49 +453,74 @@ module UMPApp
           $scope.errorMessage = "Select A User Type";
           return false;
         }
-        // if(user.UserType == "4" || user.UserType == "7"){
-        //   if(!user.isd){
-        //     $scope.errorMessage = "You have to belong to an ISD";
-        //     return false;
-        //   }
-        // }
-        // if(user.UserType == "3" || user.UserType == "6"){
-        //   if(!user.districts || user.districts.length == 0){
-        //     $scope.errorMessage = "You have to belong to an District";
-        //     return false;
-        //   }
-        // }
-        // if(user.UserType == "2" || user.UserType == "5"){
-        //   if(!user.schools || user.schools.length == 0){
-        //     $scope.errorMessage = "You have to belong to an School";
-        //     return false;
-        //   }
-        // }
+        if(user.UserType.IgorUserRoleKey == 4 || user.UserType.IgorUserRoleKey == 7){
+          if(!user.ISD){
+            $scope.errorMessage = "You have to belong to an ISD";
+            return false;
+          }
+        }
+        if(user.UserType.IgorUserRoleKey == 3 || user.UserType.IgorUserRoleKey == 6){
+          if(!user.Districts || user.Districts.length == 0){
+            $scope.errorMessage = "You have to belong to an District";
+            return false;
+          }
+        }
+        if(user.UserType.IgorUserRoleKey == 2 || user.UserType.IgorUserRoleKey == 5){
+          if(!user.Schools || user.Schools.length == 0){
+            $scope.errorMessage = "You have to belong to an School";
+            return false;
+          }
+        }
+        if(user.UserType.IgorUserRoleKey == 1){
+          for(var i = 0; i < user.Schools.length; i++){
+            if(!user.Schools[i].selectedTeachers || user.Schools[i].selectedTeachers.length == 0){
+              $scope.errorMessage = "You have to select a school teacher for each school";
+              return false;
+            }
+          }
+        }
+        if(!$scope.inNewUser && $scope.user.OldUsername != $scope.user.Username){
+          if(!$scope.newPassword || !$scope.confirmPassword){
+            $scope.errorMessage = "You have to put in a new password when changing the username.";
+            return false;
+          }
+          if($scope.newPassword != $scope.confirmPassword){
+            $scope.errorMessage = "Passwords don't match.";
+            return false;
+          }
+        }
+        if(($scope.newPassword || $scope.confirmPassword) && $scope.newPassword != $scope.confirmPassword){
+          $scope.errorMessage = "Passwords don't match.";
+          return false;
+        }
         return true;
-        /////////// classroom user login - ask about
-        // if(user.userType == "1"){
-        //
-        //   if(!user.schools || user.districts.length == 0){
-        //     return false;
-        //   }
-        // }
       }
 
       $scope.postUser = function(){
         console.log($scope.user);
-        usersService.postUser(angular.copy($scope.user));
-        // notificationService.showNotification("Success saving user", "success");
         if($scope.checkValidity()){
           //post user
-
+          if(!$scope.inNewUser && $scope.newPassword){
+            $scope.user.Password = $scope.newPassword;
+          }
           for(var i = 0; i< $scope.user.Schools.length; i++){
             $scope.user.Schools[i].schoolTeachers = [];
           }
           console.log($scope.user);
+          usersService.postUser(angular.copy($scope.user)).then(function(d){
+              $location.path("/users");
+              // show notification
+          })
+          .catch(function (d){
+            $scope.errorMessage = "Error Saving User";
+          });
         }
         else{
 
         }
+
+        // notificationService.showNotification("Success saving user", "success");
+
       }
 
       $scope.selectSchoolTeacher = function(item, school){

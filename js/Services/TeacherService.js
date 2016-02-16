@@ -5,8 +5,8 @@ var UMPApp;
             this.$http = $http;
             this.$q = $q;
             this.filtersActive = false;
-            this.apiRoot = "http://172.21.255.136";
-            // this.apiRoot = "http://win-iq115hn5k0f";
+            // this.apiRoot = "http://172.21.255.136";
+            this.apiRoot = "http://win-iq115hn5k0f";
             this.teacherSearchCanceler = $q.defer();
         }
         TeacherService.prototype.searchTeachers = function (searchInput, districtKey, schoolKey) {
